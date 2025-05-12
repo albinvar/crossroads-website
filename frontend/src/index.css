@@ -1,0 +1,204 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.slick-slider {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* ----------- main styles ------------- */
+
+h1 {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+h6 {
+  font-size: 26px;
+}
+
+p {
+  font-size: 24px;
+  line-height: 1.5;
+}
+
+.ql-size-huge {
+  font-size: 52px;
+}
+
+.ql-size-large {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 36px;
+  }
+
+  h2 {
+    font-size: 34px;
+  }
+
+  h6 {
+    font-size: 22px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  .ql-size-huge {
+    font-size: 60px;
+  }
+
+  .ql-size-large {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 50px;
+  }
+
+  h2 {
+    font-size: 40px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  h6 {
+    font-size: 24px;
+  }
+
+  .ql-size-huge {
+    font-size: 70px;
+  }
+
+  .ql-size-large {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+@media (min-width: 1440px) {
+  h1 {
+    font-size: 50px;
+  }
+
+  h2 {
+    font-size: 40px;
+  }
+
+  h6 {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  .ql-size-huge {
+    font-size: 70px;
+  }
+
+  .ql-size-large {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.ql-align-center {
+  text-align: center;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-left {
+  text-align: left;
+}
+
+.ql-align-justify {
+  text-align: justify;
+}
+
+/* px-28 px-12 */
+
+.gradient-button {
+  background: linear-gradient(45deg, #F9920A, #a0a0a0, #F9920A);
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+  transition: background 0.3s ease;
+}
+ 
+.gradient-button:hover {
+  background: linear-gradient(45deg, #F9920A);
+  background-size: 200% 200%;
+  animation: none;
+  transition: background 0.3s ease;
+}
+.gradient-button:hover {
+  background: linear-gradient(45deg, #F9920A, #ffbb00);
+  background-size: 200% 200%;
+  animation: none;
+  transition: background 0.3s ease;
+}
+ 
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+ol,
+ul {
+  padding-left: 1.5rem;
+  margin: 0;
+  list-style: none;
+}
+
+li[data-list="bullet"] {
+  list-style: disc;  
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: #00334D;
+}
+
+li[data-list="ordered"] {
+  list-style: decimal; 
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: #00334D;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
