@@ -3,7 +3,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils.html import strip_tags
-from django.db.models import Q
 from .models import (
     PopularCourses,
     CourseListing,
@@ -76,42 +75,26 @@ class FreeEducationCoursesViewSet(viewsets.ModelViewSet):
 
 class FreeCourseDetailPageBannerViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
-    queryset = FreeCourseDetailPageBanner.objects.select_related('course', 'course_listing').all()
+    queryset = FreeCourseDetailPageBanner.objects.select_related('course_listing').all()
     serializer_class = FreeCourseDetailPageBannerSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
         course_slug = self.request.query_params.get('course_slug')
-        course_type = self.request.query_params.get('course_type')
         if course_slug:
-            if course_type == 'free':
-                queryset = queryset.filter(course__link=course_slug)
-            elif course_type == 'listing':
-                queryset = queryset.filter(course_listing__link=course_slug)
-            else:
-                queryset = queryset.filter(
-                    Q(course__link=course_slug) | Q(course_listing__link=course_slug)
-                )
+            queryset = queryset.filter(course_listing__link=course_slug)
         return queryset
 
 class FreeCourseDetailPageTabViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
-    queryset = FreeCourseDetailPageTab.objects.select_related('course', 'course_listing').prefetch_related('contents').all()
+    queryset = FreeCourseDetailPageTab.objects.select_related('course_listing').prefetch_related('contents').all()
     serializer_class = FreeCourseDetailPageTabSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
         course_slug = self.request.query_params.get('course_slug')
-        course_type = self.request.query_params.get('course_type')
         if course_slug:
-            if course_type == 'free':
-                queryset = queryset.filter(course__link=course_slug)
-            elif course_type == 'listing':
-                queryset = queryset.filter(course_listing__link=course_slug)
-            else:
-                queryset = queryset.filter(
-                    Q(course__link=course_slug) | Q(course_listing__link=course_slug)
-                )
+            queryset = queryset.filter(course_listing__link=course_slug)
         return queryset
 
 class FreeCourseDetailPageTabContentViewSet(viewsets.ModelViewSet):
@@ -121,40 +104,24 @@ class FreeCourseDetailPageTabContentViewSet(viewsets.ModelViewSet):
 
 class FreeCourseDetailPageWhyChooseTitleViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
-    queryset = FreeCourseDetailPageWhyChooseTitle.objects.select_related('course', 'course_listing').all()
+    queryset = FreeCourseDetailPageWhyChooseTitle.objects.select_related('course_listing').all()
     serializer_class = FreeCourseDetailPageWhyChooseTitleSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
         course_slug = self.request.query_params.get('course_slug')
-        course_type = self.request.query_params.get('course_type')
         if course_slug:
-            if course_type == 'free':
-                queryset = queryset.filter(course__link=course_slug)
-            elif course_type == 'listing':
-                queryset = queryset.filter(course_listing__link=course_slug)
-            else:
-                queryset = queryset.filter(
-                    Q(course__link=course_slug) | Q(course_listing__link=course_slug)
-                )
+            queryset = queryset.filter(course_listing__link=course_slug)
         return queryset
 
 class FreeCourseDetailPageWhyChooseViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
-    queryset = FreeCourseDetailPageWhyChoose.objects.select_related('course', 'course_listing').all()
+    queryset = FreeCourseDetailPageWhyChoose.objects.select_related('course_listing').all()
     serializer_class = FreeCourseDetailPageWhyChooseSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
         course_slug = self.request.query_params.get('course_slug')
-        course_type = self.request.query_params.get('course_type')
         if course_slug:
-            if course_type == 'free':
-                queryset = queryset.filter(course__link=course_slug)
-            elif course_type == 'listing':
-                queryset = queryset.filter(course_listing__link=course_slug)
-            else:
-                queryset = queryset.filter(
-                    Q(course__link=course_slug) | Q(course_listing__link=course_slug)
-                )
+            queryset = queryset.filter(course_listing__link=course_slug)
         return queryset

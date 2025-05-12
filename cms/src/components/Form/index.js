@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, Reorder, useDragControls } from "framer-motion";
-import { PlusIcon, TrashIcon, SaveIcon, EditIcon, XIcon, GripIcon } from "../Icons";
-import FieldRenderer from "../FieldRenderer";
-import Modal from "../Modal";
-import apiClient from "../../api/apiClient";
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, Reorder, useDragControls } from 'framer-motion';
+import { PlusIcon, TrashIcon, SaveIcon, EditIcon, XIcon, GripIcon } from '../Icons';
+import FieldRenderer from '../FieldRenderer';
+import Modal from '../Modal';
+import apiClient from '../../api/apiClient';
 
 const IconButton = ({ IconComponent, iconName, onClick, label, className }) => {
   const Icon = IconComponent;
@@ -14,7 +14,7 @@ const IconButton = ({ IconComponent, iconName, onClick, label, className }) => {
       className={`${className} focus:outline-none flex items-center`}
       aria-label={label}
     >
-      <span className="mr-1 font-semibold text-xs text-gray-800">{iconName}</span>
+      {iconName && <span className="mr-1 font-semibold text-xs text-gray-800">{iconName}</span>}
       <Icon size={18} strokeWidth={1.5} />
     </button>
   );
@@ -69,7 +69,7 @@ const EntryCard = ({
                     IconComponent={EditIcon}
                     iconName="Edit"
                     onClick={() =>
-                      handleIndividualEdit(item[identifierField], "image", item.image)
+                      handleIndividualEdit(item[identifierField], 'image', item.image)
                     }
                     label="Edit Image"
                     className="text-blue-800 hover:text-gray-800 transition-all duration-200"
@@ -77,7 +77,7 @@ const EntryCard = ({
                   <IconButton
                     IconComponent={TrashIcon}
                     iconName="Delete"
-                    onClick={() => handleDeleteField(item[identifierField], "image")}
+                    onClick={() => handleDeleteField(item[identifierField], 'image')}
                     label="Delete Image"
                     className="text-red-600 hover:text-red-800 transition-all duration-200"
                   />
@@ -93,8 +93,8 @@ const EntryCard = ({
           </div>
           <div className="flex-grow space-y-2">
             {Object.entries(item).map(([key, value]) => {
-              if (key === "image" || key === identifierField) return null;
-              if (typeof value === "string") {
+              if (key === 'image' || key === identifierField) return null;
+              if (typeof value === 'string') {
                 const truncatedValue =
                   value.length > charLimit
                     ? `${value.slice(0, charLimit)}...`
@@ -152,6 +152,7 @@ const EntryCard = ({
             {editMode && currentEditId === item[identifierField] && (
               <IconButton
                 IconComponent={XIcon}
+                iconName=""
                 onClick={() => handleCancelEdit(item[identifierField])}
                 label="Cancel Edit"
                 className="text-gray-600 hover:text-gray-800 transition-all duration-200"
@@ -177,15 +178,15 @@ const Form = ({
   setEditMode,
   sectionName,
   apiEndpoint,
-  identifierField = "id",
+  identifierField = 'id',
   showAddItems = false,
   transformData = (data) => data,
 }) => {
   const [data, setData] = useState([]);
   const [currentEditId, setCurrentEditId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [individualEdit, setIndividualEdit] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -199,14 +200,14 @@ const Form = ({
         const response = await apiClient.get(apiEndpoint);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     };
     fetchData();
   }, [apiEndpoint]);
 
   const handleReorder = (newOrder) => {
-    if (apiEndpoint === "/service/service-destination-listings/") {
+    if (apiEndpoint === '/service/service-destination-listings/') {
       setData(newOrder);
       const orderData = newOrder.map((item, index) => ({
         id: item.id,
@@ -216,14 +217,14 @@ const Form = ({
       apiClient
         .post(`${apiEndpoint}reorder/`, { order: orderData })
         .then(() => {
-          setModalTitle("Success");
-          setModalMessage("Order updated successfully.");
+          setModalTitle('Success');
+          setModalMessage('Order updated successfully.');
           setIsModalOpen(true);
         })
         .catch((error) => {
-          console.error("Error updating order:", error);
-          setModalTitle("Error");
-          setModalMessage("Failed to update order.");
+          console.error('Error updating order:', error);
+          setModalTitle('Error');
+          setModalMessage('Failed to update order.');
           setIsModalOpen(true);
         });
     } else {
@@ -234,7 +235,7 @@ const Form = ({
   const handleAddNewEntry = () => {
     const newEntry = dataSets[0].template.map((field) => ({
       ...field,
-      value: field.type === "image" || field.type === "select" ? null : "",
+      value: field.type === 'image' || field.type === 'select' ? null : '',
     }));
     setNewEntries((prev) => [...prev, newEntry]);
   };
@@ -256,16 +257,17 @@ const Form = ({
   };
 
   const handleIndividualEdit = (itemIdentifier, fieldId, currentValue) => {
-    const item = data.find((i) => i[identifierField] === itemIdentifier);
     const field = dataSets
       .flatMap((set) => set.fields)
       .find((f) => f.id === fieldId);
-    setIndividualEdit({
-      itemIdentifier,
-      field: { ...field, value: currentValue },
-    });
-    setEditMode(true);
-    formRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (field) {
+      setIndividualEdit({
+        itemIdentifier,
+        field: { ...field, value: currentValue },
+      });
+      setEditMode(true);
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleIndividualFieldChange = (id, value) => {
@@ -280,13 +282,16 @@ const Form = ({
     if (!individualEdit) return;
 
     const formData = new FormData();
-    formData.append(individualEdit.field.id, individualEdit.field.value || "");
+    formData.append(
+      individualEdit.field.id,
+      individualEdit.field.value || ''
+    );
 
     try {
       const response = await apiClient.patch(
         `${apiEndpoint}${individualEdit.itemIdentifier}/`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
       setData((prevData) =>
@@ -299,13 +304,13 @@ const Form = ({
 
       setIndividualEdit(null);
       setEditMode(false);
-      setModalTitle("Success");
-      setModalMessage("Field updated successfully.");
+      setModalTitle('Success');
+      setModalMessage('Field updated successfully.');
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Error updating field:", error);
-      setModalTitle("Error");
-      setModalMessage("Failed to update field.");
+      console.error('Error updating field:', error);
+      setModalTitle('Error');
+      setModalMessage('Failed to update field.');
       setIsModalOpen(true);
     }
   };
@@ -318,8 +323,8 @@ const Form = ({
       fields.some((field) => field.showWarning && !field.value)
     );
     if (hasErrors && !newEntries.length && !currentEditId) {
-      setModalTitle("Error");
-      setModalMessage("Please fill all required fields.");
+      setModalTitle('Error');
+      setModalMessage('Please fill all required fields.');
       setIsModalOpen(true);
       setIsSubmitted(false);
       return;
@@ -332,15 +337,15 @@ const Form = ({
             const formData = new FormData();
             const transformedData = transformData(
               entry.reduce((acc, field) => {
-                acc[field.id] = field.value || "";
+                acc[field.id] = field.value || '';
                 return acc;
               }, {})
             );
             Object.entries(transformedData).forEach(([key, value]) => {
-              formData.append(key, value || "");
+              formData.append(key, value || '');
             });
             return apiClient.post(apiEndpoint, formData, {
-              headers: { "Content-Type": "multipart/form-data" },
+              headers: { 'Content-Type': 'multipart/form-data' },
             });
           })
         );
@@ -350,13 +355,13 @@ const Form = ({
           ...responses.map((res) => res.data),
         ]);
         setNewEntries([]);
-        setModalTitle("Success");
-        setModalMessage("Multiple entries added successfully.");
+        setModalTitle('Success');
+        setModalMessage('Multiple entries added successfully.');
         setIsModalOpen(true);
       } catch (error) {
-        console.error("Error adding entries:", error);
-        setModalTitle("Error");
-        setModalMessage("Failed to add entries.");
+        console.error('Error adding entries:', error);
+        setModalTitle('Error');
+        setModalMessage('Failed to add entries.');
         setIsModalOpen(true);
       }
     } else if (currentEditId !== null) {
@@ -364,20 +369,20 @@ const Form = ({
       const transformedData = transformData(
         dataSets.reduce((acc, { fields }) => {
           fields.forEach((field) => {
-            acc[field.id] = field.value || "";
+            acc[field.id] = field.value || '';
           });
           return acc;
         }, {})
       );
       Object.entries(transformedData).forEach(([key, value]) => {
-        formData.append(key, value || "");
+        formData.append(key, value || '');
       });
 
       try {
         const response = await apiClient.put(
           `${apiEndpoint}${currentEditId}/`,
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { 'Content-Type': 'multipart/form-data' } }
         );
 
         setData((prevData) =>
@@ -388,13 +393,13 @@ const Form = ({
 
         setCurrentEditId(null);
         setEditMode(false);
-        setModalTitle("Success");
-        setModalMessage("Entry updated successfully.");
+        setModalTitle('Success');
+        setModalMessage('Entry updated successfully.');
         setIsModalOpen(true);
       } catch (error) {
-        console.error("Error updating entry:", error);
-        setModalTitle("Error");
-        setModalMessage("Failed to update entry.");
+        console.error('Error updating entry:', error);
+        setModalTitle('Error');
+        setModalMessage('Failed to update entry.');
         setIsModalOpen(true);
       }
     } else {
@@ -402,18 +407,18 @@ const Form = ({
       const transformedData = transformData(
         dataSets.reduce((acc, { fields }) => {
           fields.forEach((field) => {
-            acc[field.id] = field.value || "";
+            acc[field.id] = field.value || '';
           });
           return acc;
         }, {})
       );
       Object.entries(transformedData).forEach(([key, value]) => {
-        formData.append(key, value || "");
+        formData.append(key, value || '');
       });
 
       try {
         const response = await apiClient.post(apiEndpoint, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 'Content-Type': 'multipart/form-data' },
         });
 
         setData((prevData) => [...prevData, response.data]);
@@ -421,17 +426,17 @@ const Form = ({
           setFields((fields) =>
             fields.map((field) => ({
               ...field,
-              value: field.type === "image" || field.type === "select" ? null : "",
+              value: field.type === 'image' || field.type === 'select' ? null : '',
             }))
           );
         });
-        setModalTitle("Success");
-        setModalMessage("Entry added successfully.");
+        setModalTitle('Success');
+        setModalMessage('Entry added successfully.');
         setIsModalOpen(true);
       } catch (error) {
-        console.error("Error adding entry:", error);
-        setModalTitle("Error");
-        setModalMessage("Failed to add entry.");
+        console.error('Error adding entry:', error);
+        setModalTitle('Error');
+        setModalMessage('Failed to add entry.');
         setIsModalOpen(true);
       }
     }
@@ -444,26 +449,26 @@ const Form = ({
       setData((prevData) =>
         prevData.filter((item) => item[identifierField] !== identifier)
       );
-      setModalTitle("Success");
-      setModalMessage("Entry deleted successfully.");
+      setModalTitle('Success');
+      setModalMessage('Entry deleted successfully.');
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Error deleting entry:", error);
-      setModalTitle("Error");
-      setModalMessage("Failed to delete entry.");
+      console.error('Error deleting entry:', error);
+      setModalTitle('Error');
+      setModalMessage('Failed to delete entry.');
       setIsModalOpen(true);
     }
   };
 
   const handleDeleteField = async (identifier, fieldId) => {
     const formData = new FormData();
-    formData.append(fieldId, "");
+    formData.append(fieldId, '');
 
     try {
       const response = await apiClient.patch(
         `${apiEndpoint}${identifier}/`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
       setData((prevData) =>
@@ -472,13 +477,13 @@ const Form = ({
         )
       );
 
-      setModalTitle("Success");
+      setModalTitle('Success');
       setModalMessage(`Field ${fieldId} deleted successfully.`);
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Error deleting field:", error);
-      setModalTitle("Error");
-      setModalMessage("Failed to delete field.");
+      console.error('Error deleting field:', error);
+      setModalTitle('Error');
+      setModalMessage('Failed to delete field.');
       setIsModalOpen(true);
     }
   };
@@ -488,13 +493,13 @@ const Form = ({
       setFields(
         fields.map((field) => ({
           ...field,
-          value: item[field.id] || (field.type === "image" || field.type === "select" ? null : ""),
+          value: item[field.id] || (field.type === 'image' || field.type === 'select' ? null : ''),
         }))
       );
     });
     setCurrentEditId(item[identifierField]);
     setEditMode(true);
-    formRef.current?.scrollIntoView({ behavior: "smooth" });
+    formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleCancelEdit = () => {
@@ -502,7 +507,7 @@ const Form = ({
       setFields(
         fields.map((field) => ({
           ...field,
-          value: field.type === "image" || field.type === "select" ? null : "",
+          value: field.type === 'image' || field.type === 'select' ? null : '',
         }))
       );
     });
@@ -518,13 +523,13 @@ const Form = ({
   };
 
   const removeHtmlTags = (str) => {
-    if (typeof str !== "string") return "";
-    return str.replace(/<\/?[^>]*>/g, "").trim();
+    if (typeof str !== 'string') return '';
+    return str.replace(/<\/?[^>]*>/g, '').trim();
   };
 
   const handlePagination = (direction) => {
     setCurrentPage((prevPage) =>
-      direction === "next"
+      direction === 'next'
         ? prevPage + 1
         : prevPage > 1
         ? prevPage - 1
@@ -544,13 +549,17 @@ const Form = ({
       <div className="flex items-start justify-center p-4 bg-transparent">
         <div className="w-full space-y-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">{sectionName}</h2>
-          {individualEdit ? (
-            <form
-              onSubmit={handleIndividualSubmit}
-              ref={formRef}
-              className="space-y-6"
-            >
-              <div className="mb-4">
+          <form
+            ref={formRef}
+            onSubmit={individualEdit ? handleIndividualSubmit : handleSubmit}
+            className="space-y-6"
+          >
+            {/* Individual Field Edit */}
+            {individualEdit && (
+              <div className="space-y-4">
+                <h3 className="text-xs font-semibold text-gray-800 mb-2">
+                  Editing Field: {individualEdit.field.label}
+                </h3>
                 <FieldRenderer
                   field={individualEdit.field}
                   setFields={(fields) =>
@@ -563,124 +572,105 @@ const Form = ({
                   onChange={handleIndividualFieldChange}
                   isSubmitted={isSubmitted}
                 />
-              </div>
-              <div className="flex space-x-4 justify-start">
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  type="submit"
-                  className="min-w-xs px-6 py-2 bg-blue-200 text-blue-800 hover:text-gray-800 hover:bg-gray-200 text-sm font-medium rounded-lg transition-all duration-300 flex items-center justify-center"
-                >
-                  <SaveIcon size={18} strokeWidth={1.5} />
-                  <span className="ml-1">Update Field</span>
-                </motion.button>
-                <IconButton
-                  IconComponent={XIcon}
-                  onClick={handleCancelEdit}
-                  label="Cancel"
-                  className="text-gray-600 hover:text-gray-800 transition-all duration-200"
-                />
-              </div>
-            </form>
-          ) : (
-            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-              {!editMode && newEntries.length === 0 && (
-                <div className="space-y-4">
-                  {dataSets.map(({ name, fields }, index) => (
-                    <div key={index} className="space-y-4">
-                      <h3 className="text-xs font-semibold text-gray-800 mb-2">
-                        {name}:
-                      </h3>
-                      {fields.map((field) => (
-                        <FieldRenderer
-                          key={field.id}
-                          field={field}
-                          setFields={dataSets[index].setFields}
-                          isSubmitted={isSubmitted}
-                        />
-                      ))}
-                    </div>
-                  ))}
+                <div className="flex space-x-4 justify-start">
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    type="submit"
+                    className="min-w-xs px-6 py-2 bg-blue-200 text-blue-800 hover:text-gray-800 hover:bg-gray-200 text-sm font-medium rounded-lg transition-all duration-300 flex items-center justify-center"
+                  >
+                    <SaveIcon size={18} strokeWidth={1.5} />
+                    <span className="ml-1">Update Field</span>
+                  </motion.button>
+                  <IconButton
+                    IconComponent={XIcon}
+                    iconName=""
+                    onClick={handleCancelEdit}
+                    label="Cancel"
+                    className="text-gray-600 hover:text-gray-800 transition-all duration-200"
+                  />
                 </div>
-              )}
-              {newEntries.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="text-xs font-semibold text-gray-800 mb-2">
-                    New Entries:
-                  </h3>
-                  {newEntries.map((entry, entryIndex) => (
-                    <div key={entryIndex} className="space-y-2 rounded-md">
-                      {entry.map((field) => (
-                        <FieldRenderer
-                          key={field.id}
-                          field={field}
-                          setFields={(fields) =>
-                            handleNewEntryChange(
-                              entryIndex,
-                              field.id,
-                              fields.find((f) => f.id === field.id).value
-                            )
-                          }
-                          onChange={(id, value) =>
-                            handleNewEntryChange(entryIndex, id, value)
-                          }
-                          isSubmitted={isSubmitted}
+              </div>
+            )}
+
+            {/* New Entries */}
+            {newEntries.length > 0 && !individualEdit && (
+              <div className="space-y-4">
+                <h3 className="text-xs font-semibold text-gray-800 mb-2">
+                  New Entries:
+                </h3>
+                {newEntries.map((entry, entryIndex) => (
+                  <div key={entryIndex} className="space-y-2 rounded-md border border-gray-200 p-4">
+                    {entry.map((field) => (
+                      <FieldRenderer
+                        key={field.id}
+                        field={field}
+                        setFields={(fields) =>
+                          handleNewEntryChange(
+                            entryIndex,
+                            field.id,
+                            fields.find((f) => f.id === field.id).value
+                          )
+                        }
+                        onChange={(id, value) =>
+                          handleNewEntryChange(entryIndex, id, value)
+                        }
+                        isSubmitted={isSubmitted}
+                      />
+                    ))}
+                    <div className="flex items-center justify-start space-x-2">
+                      {showAddItems && (
+                        <div
+                          className="flex items-center justify-center cursor-pointer"
+                          onClick={() => handleRemoveNewEntry(entryIndex)}
+                        >
+                          <IconButton
+                            IconComponent={TrashIcon}
+                            iconName="Remove"
+                            label="Remove Entry"
+                            className="text-red-600 hover:text-red-800 transition-all duration-200"
+                          />
+                        </div>
+                      )}
+                      <div
+                        className="flex items-center justify-center cursor-pointer"
+                        onClick={handleCancelEdit}
+                      >
+                        <IconButton
+                          IconComponent={XIcon}
+                          iconName="Cancel"
+                          label="Cancel"
+                          className="text-gray-600 hover:text-gray-800 transition-all duration-200"
                         />
-                      ))}
-                      <div className="flex items-center justify-start space-x-2">
-                        {showAddItems && (
-                          <div
-                            className="flex items-center justify-center cursor-pointer"
-                            onClick={() => handleRemoveNewEntry(entryIndex)}
-                          >
-                            <IconButton
-                              IconComponent={TrashIcon}
-                              label="Remove Entry"
-                              className="text-red-600 hover:text-red-800 transition-all duration-200"
-                            />
-                            <span className="ml-1 text-sm text-red-600 hover:text-red-800 transition-all duration-200">
-                              Remove
-                            </span>
-                          </div>
-                        )}
-                        {(editMode || newEntries.length > 0) && (
-                          <div
-                            className="flex items-center justify-center cursor-pointer"
-                            onClick={handleCancelEdit}
-                          >
-                            <IconButton
-                              IconComponent={XIcon}
-                              label="Cancel"
-                              className="text-gray-600 hover:text-gray-800 transition-all duration-200"
-                            />
-                            <span className="ml-1 text-sm text-gray-600 hover:text-gray-800 transition-all duration-200">
-                              Remove all
-                            </span>
-                          </div>
-                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-              {editMode && currentEditId !== null && (
-                <div className="space-y-4">
-                  {dataSets.map(({ name, fields }, index) => (
-                    <div key={index} className="space-y-4">
-                      <h3 className="text-xs font-semibold text-gray-800 mb-2">
-                        {name}:
-                      </h3>
-                      {fields.map((field) => (
-                        <FieldRenderer
-                          key={field.id}
-                          field={field}
-                          setFields={dataSets[index].setFields}
-                          isSubmitted={isSubmitted}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Full Entry Edit or New Entry Form */}
+            {!individualEdit && newEntries.length === 0 && (
+              <div className="space-y-4">
+                {dataSets.map(({ name, fields }, index) => (
+                  <div key={index} className="space-y-4">
+                    <h3 className="text-xs font-semibold text-gray-800 mb-2">
+                      {editMode && currentEditId !== null ? `Editing Entry: ${currentEditId}` : name}
+                    </h3>
+                    {fields.map((field) => (
+                      <FieldRenderer
+                        key={field.id}
+                        field={field}
+                        setFields={dataSets[index].setFields}
+                        isSubmitted={isSubmitted}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Form Buttons */}
+            {!individualEdit && (
               <div className="flex justify-start space-x-4">
                 {showAddItems && (
                   <motion.button
@@ -702,12 +692,23 @@ const Form = ({
                 >
                   <SaveIcon size={18} strokeWidth={1.5} />
                   <span className="ml-1">
-                    {editMode && currentEditId !== null ? "Update" : "Save"}
+                    {editMode && currentEditId !== null ? 'Update' : 'Save'}
                   </span>
                 </motion.button>
+                {(editMode || newEntries.length > 0) && (
+                  <IconButton
+                    IconComponent={XIcon}
+                    iconName="Cancel"
+                    onClick={handleCancelEdit}
+                    label="Cancel"
+                    className="text-gray-600 hover:text-gray-800 transition-all duration-200"
+                  />
+                )}
               </div>
-            </form>
-          )}
+            )}
+          </form>
+
+          {/* Updated Contents */}
           <div className="space-y-4">
             <h2 className="text-xs font-semibold text-gray-800 mb-2">
               Updated Contents:
@@ -738,14 +739,14 @@ const Form = ({
             </Reorder.Group>
             <div className="flex justify-center space-x-4 w-full">
               <button
-                onClick={() => handlePagination("prev")}
+                onClick={() => handlePagination('prev')}
                 disabled={currentPage === 1}
                 className="px-6 py-2 bg-blue-200 text-blue-800 hover:text-gray-800 hover:bg-gray-200 text-sm font-medium rounded-lg transition-all duration-300 disabled:bg-gray-200 disabled:text-gray-400"
               >
                 Previous
               </button>
               <button
-                onClick={() => handlePagination("next")}
+                onClick={() => handlePagination('next')}
                 disabled={currentPage * rowsPerPage >= data.length}
                 className="px-6 py-2 bg-blue-200 text-blue-800 hover:text-gray-800 hover:bg-gray-200 text-sm font-medium rounded-lg transition-all duration-300 disabled:bg-gray-200 disabled:text-gray-400"
               >

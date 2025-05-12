@@ -18,8 +18,8 @@ import Gallery from "./pages/Gallery";
 import Blogs from "./pages/Blogs";
 import GalleryDetail from "./pages/Gallery/pages/GalleryDetail";
 import BlogDetail from "./pages/Blogs/page/BlogDetail";
-import DetailedFreeEducation from "./pages/Home/UiComponents/FreeEducation/page/DetailedFreeEducation";
 import DetailedFreeCourses from "./pages/Home/UiComponents/FreeEducation/page/DetailedFreeCourses";
+import DetailedFreeEducation from "./pages/Home/UiComponents/FreeEducation/page/DetailedFreeEducation";
 
 function App() {
   const router = createBrowserRouter(

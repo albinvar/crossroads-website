@@ -18,7 +18,7 @@ const CourseDetailWhyChooseSection = () => {
       .get('/courses/course-listings/')
       .then((response) => {
         const cleanedData = response.data.map((item) => ({
-          value: `listing_${item.id}`,
+          value: item.id,
           label: sanitizeLabel(item.title || 'Unnamed Course Listing'),
         }));
         setCourseListingData(cleanedData);
@@ -28,7 +28,7 @@ const CourseDetailWhyChooseSection = () => {
 
   const initialFields = [
     {
-      id: 'course',
+      id: 'course_listing',
       type: 'select',
       label: 'Select a Course Listing',
       value: '',
@@ -38,7 +38,7 @@ const CourseDetailWhyChooseSection = () => {
     },
     {
       id: 'title',
-      type: 'text',
+      type: 'textEditor',
       label: 'Why Choose Item Title',
       value: '',
       warning: 'Please enter the item title.',
@@ -51,7 +51,7 @@ const CourseDetailWhyChooseSection = () => {
       value: '',
       warning: 'Please enter the item description.',
       showWarning: true,
-    }
+    },
   ];
 
   const [mainSet, setMainSet] = useState(initialFields);
@@ -60,7 +60,7 @@ const CourseDetailWhyChooseSection = () => {
   useEffect(() => {
     setMainSet((prev) =>
       prev.map((field) =>
-        field.id === 'course' ? { ...field, options: courseListingData } : field
+        field.id === 'course_listing' ? { ...field, options: courseListingData } : field
       )
     );
   }, [courseListingData]);
@@ -83,17 +83,6 @@ const CourseDetailWhyChooseSection = () => {
         apiEndpoint="/courses/course-why-choose-entry/"
         identifierField="id"
         showAddItems={true}
-        transformData={(data) => {
-          const transformedData = { ...data };
-          if (data.course && data.course.startsWith('listing_')) {
-            transformedData.course_listing = parseInt(data.course.replace('listing_', ''));
-          } else {
-            transformedData.course_listing = null;
-          }
-          transformedData.course = null;
-          delete transformedData.course; 
-          return transformedData;
-        }}
       />
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router';
 import CourseCard from '../../../../components/UiComponents/CourseCard';
 import apiService from '../../../../api/apiService';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -176,12 +177,14 @@ const PopularCourses = () => {
                   exit="exit"
                   custom={index - COURSES_PER_PAGE}
                 >
-                  <CourseCard
-                    title={course.title}
-                    description={course.description}
-                    image={course.image}
-                    link={course.link} 
-                  />
+                  <Link to={`/services/education/course/${course.link}`}>
+                    <CourseCard
+                      title={course.title}
+                      description={course.description}
+                      image={course.image}
+                      link={course.link}
+                    />
+                  </Link>
                 </motion.div>
               ))
             ) : (
@@ -191,7 +194,7 @@ const PopularCourses = () => {
                 initial="hidden"
                 animate="visible"
               >
-                <p className="text-lg font-semibold">No courses available</p>
+                <p className="text-lg fonts-semibold">No courses available</p>
                 <p className="mt-2">Check back later for updates!</p>
               </motion.div>
             )}

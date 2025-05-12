@@ -90,13 +90,15 @@ const Hero = ({ slides, setSlides }) => {
                       variants={textVariants}
                       transition={{ delay: 0.4 }}
                     >
-                        <Button
-                          label="Apply Now"
-                          className="text-[#fcfcfc] hover:text-primary-dark text-sm font-light bg-primary-dark hover:bg-white rounded-full w-32 h-10 transition-colors duration-300"
-                        />
-                      <Link to={`/services/education/course/${slide.link}`} className='flex items-center justify-center text-white hover:text-primary-orange text-sm font-light bg-primary-orange hover:bg-white rounded-full w-32 h-10 transition-colors duration-300'>
-                        Learn More
-                      </Link>
+                      <Button
+                        label="Apply Now"
+                        className="text-[#fcfcfc] hover:text-primary-dark text-sm font-light bg-primary-dark hover:bg-white rounded-full w-32 h-10 transition-colors duration-300"
+                      />
+                      {slide.link && (
+                        <Link to={`/services/education/course/${slide.link}`} className='flex items-center justify-center text-white hover:text-primary-orange text-sm font-light bg-primary-orange hover:bg-white rounded-full w-32 h-10 transition-colors duration-300'>
+                          Learn More
+                        </Link>
+                      )}
                     </motion.div>
                   </div>
                 </motion.div>

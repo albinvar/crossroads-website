@@ -19,7 +19,7 @@ const CourseDetailWhyChooseTitleCreate = () => {
       .get('/courses/course-listings/')
       .then((response) => {
         const cleanedData = response.data.map((item) => ({
-          value: `listing_${item.id}`,
+          value: item.id,
           label: sanitizeLabel(item.title || 'Unnamed Course Listing'),
         }));
         setCourseListingData(cleanedData);
@@ -29,7 +29,7 @@ const CourseDetailWhyChooseTitleCreate = () => {
 
   const initialFields = [
     {
-      id: 'course',
+      id: 'course_listing',
       type: 'select',
       label: 'Select a Course Listing',
       value: '',
@@ -53,7 +53,7 @@ const CourseDetailWhyChooseTitleCreate = () => {
   useEffect(() => {
     setMainSet((prev) =>
       prev.map((field) =>
-        field.id === 'course' ? { ...field, options: courseListingData } : field
+        field.id === 'course_listing' ? { ...field, options: courseListingData } : field
       )
     );
   }, [courseListingData]);
@@ -76,17 +76,6 @@ const CourseDetailWhyChooseTitleCreate = () => {
         apiEndpoint="/courses/course-why-choose-title-entry/"
         identifierField="id"
         showAddItems={true}
-        transformData={(data) => {
-          const transformedData = { ...data };
-          if (data.course && data.course.startsWith('listing_')) {
-            transformedData.course_listing = parseInt(data.course.replace('listing_', ''));
-          } else {
-            transformedData.course_listing = null;
-          }
-          transformedData.course = null; 
-          delete transformedData.course; 
-          return transformedData;
-        }}
       />
       <CourseDetailWhyChooseSection />
     </div>

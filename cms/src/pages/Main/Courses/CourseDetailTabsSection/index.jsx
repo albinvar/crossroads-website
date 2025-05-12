@@ -19,7 +19,7 @@ const CourseDetailTabsSection = () => {
       .get('/courses/course-listings/')
       .then((response) => {
         const cleanedData = response.data.map((item) => ({
-          value: `listing_${item.id}`,
+          value: item.id,
           label: sanitizeLabel(item.title || 'Unnamed Course Listing'),
         }));
         setCourseListingData(cleanedData);
@@ -40,7 +40,7 @@ const CourseDetailTabsSection = () => {
 
   const initialFields = [
     {
-      id: 'course',
+      id: 'course_listing',
       type: 'select',
       label: 'Select a Course Listing',
       value: '',
@@ -68,11 +68,11 @@ const CourseDetailTabsSection = () => {
     {
       id: 'content',
       type: 'textEditor',
-      label: 'Content',
+      label: 'Content (Use heading tag include first for title)',
       value: '',
       warning: 'Please enter the content.',
       showWarning: true,
-    }
+    },
   ];
 
   const [mainSet, setMainSet] = useState(initialFields);
@@ -81,7 +81,7 @@ const CourseDetailTabsSection = () => {
   useEffect(() => {
     setMainSet((prev) =>
       prev.map((field) =>
-        field.id === 'course'
+        field.id === 'course_listing'
           ? { ...field, options: courseListingData }
           : field.id === 'tab'
           ? { ...field, options: tabData }
@@ -108,17 +108,6 @@ const CourseDetailTabsSection = () => {
         apiEndpoint="/courses/course-tab-content-entry/"
         identifierField="id"
         showAddItems={true}
-        transformData={(data) => {
-          const transformedData = { ...data };
-          if (data.course && data.course.startsWith('listing_')) {
-            transformedData.course_listing = parseInt(data.course.replace('listing_', ''));
-          } else {
-            transformedData.course_listing = null;
-          }
-          transformedData.course = null; 
-          delete transformedData.course;
-          return transformedData;
-        }}
       />
     </div>
   );

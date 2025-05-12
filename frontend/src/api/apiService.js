@@ -7,25 +7,22 @@ const apiService = {
   getPopularCourseTabs: () => {
     return apiClient.get("/courses/popular-courses/tabs/");
   },
-  getFreeCourseDetailPageBanner: (slug, courseType) => {
-    const url = `/courses/course-banner-entry/?course_slug=${encodeURIComponent(
-      slug
-    )}${courseType ? `&course_type=${courseType}` : ""}`;
+  getFreeCourseDetailPageBanner: (slug) => {
+    const url = `/courses/course-banner-entry/?course_slug=${encodeURIComponent(slug)}`;
     return apiClient.get(url);
   },
   getFreeCourseDetailPageTabs: (slug) => {
     return apiClient.get(`/courses/course-tab-entry/?course_slug=${encodeURIComponent(slug)}`);
   },
   getFreeCourseDetailPageWhyChooseTitle: (slug) => {
-    return apiClient.get(`/courses/course-why-choose-title-entry/?course_slug=${encodeURIComponent(slug)}`);
+    const url = `/courses/course-why-choose-title-entry/?course_slug=${encodeURIComponent(slug)}`;
+    return apiClient.get(url);
   },
   getFreeCourseDetailPageWhyChoose: (slug) => {
     return apiClient.get(`/courses/course-why-choose-entry/?course_slug=${encodeURIComponent(slug)}`);
   },
   getCoursesByTab: (tab) => {
-    return apiClient.get(
-      `/courses/course-listings/by-tab/?tab=${encodeURIComponent(tab)}`
-    );
+    return apiClient.get(`/courses/course-listings/by-tab/?tab=${encodeURIComponent(tab)}`);
   },
   getAboutHighlights: () => {
     return apiClient.get("/about/about-highlights/");
@@ -36,71 +33,36 @@ const apiService = {
   getFreeEducationTitle: () => {
     return apiClient.get("/free-education/free-education-title/");
   },
-
   getFreeEducationCountries: () => {
     return apiClient.get("/free-education/free-education-country/");
   },
-
   getFreeEducationCountryDedicatedPage: (slug) => {
-    return apiClient.get(
-      `/free-education/free-education-country-banner-entry/?free_education_country_slug=${encodeURIComponent(
-        slug
-      )}`
-    );
+    return apiClient.get(`/free-education/free-education-country-banner-entry/?free_education_country_slug=${encodeURIComponent(slug)}`);
   },
   getFreeEducationCountryKeyFactTitle: (slug) => {
-    return apiClient.get(
-      `/free-education/free-education-country-key-fact-title-entry/?free_education_country_slug=${encodeURIComponent(
-        slug
-      )}`
-    );
+    return apiClient.get(`/free-education/free-education-country-key-fact-title-entry/?free_education_country_slug=${encodeURIComponent(slug)}`);
   },
   getFreeEducationCountryKeyFactListings: (slug) => {
-    return apiClient.get(
-      `/free-education/free-education-country-key-fact-listing-entry/?free_education_country_slug=${encodeURIComponent(
-        slug
-      )}`
-    );
+    return apiClient.get(`/free-education/free-education-country-key-fact-listing-entry/?free_education_country_slug=${encodeURIComponent(slug)}`);
   },
   getFreeEducationCountryRequirementsTitle: (slug) => {
-    return apiClient.get(
-      `/free-education/free-education-country-requirements-title-entry/?free_education_country_slug=${encodeURIComponent(
-        slug
-      )}`
-    );
+    return apiClient.get(`/free-education/free-education-country-requirements-title-entry/?free_education_country_slug=${encodeURIComponent(slug)}`);
   },
   getFreeEducationCountryRequirementsListings: (slug) => {
-    return apiClient.get(
-      `/free-education/free-education-country-requirements-listing-entry/?free_education_country_slug=${encodeURIComponent(
-        slug
-      )}`
-    );
+    return apiClient.get(`/free-education/free-education-country-requirements-listing-entry/?free_education_country_slug=${encodeURIComponent(slug)}`);
   },
-
   getFreeEducationCountryOtherOptionsTitle: (slug) => {
-    return apiClient.get(
-      `/free-education/free-education-country-other-options-title-entry/?free_education_country_slug=${encodeURIComponent(
-        slug
-      )}`
-    );
+    return apiClient.get(`/free-education/free-education-country-other-options-title-entry/?free_education_country_slug=${encodeURIComponent(slug)}`);
   },
   getFreeEducationCountryOtherOptionsListings: (slug) => {
-    return apiClient.get(
-      `/free-education/free-education-country-other-options-listing-entry/?free_education_country_slug=${encodeURIComponent(
-        slug
-      )}`
-    );
+    return apiClient.get(`/free-education/free-education-country-other-options-listing-entry/?free_education_country_slug=${encodeURIComponent(slug)}`);
   },
   getFreeEducationCourses: (link = null) => {
-    const url = link
-      ? `/courses/free-education-courses/?link=${encodeURIComponent(link)}`
-      : `/courses/free-education-courses/`;
+    const url = link ? `/courses/free-education-courses/?link=${encodeURIComponent(link)}` : `/courses/free-education-courses/`;
     return apiClient.get(url);
   },
   getCourseListings: (link = null) => {
-    const url = link
-      ? `/courses/course-listings/?link=${encodeURIComponent(link)}`
-      : `/courses/course-listings/`;
+    const url = link ? `/courses/course-listings/?link=${encodeURIComponent(link)}` : `/courses/course-listings/`;
     return apiClient.get(url);
   },
   getNewsTitle: () => {
@@ -110,11 +72,7 @@ const apiService = {
     return apiClient.get("/news-and-events/news-events-listing/");
   },
   getNewsEventByLink: (link) => {
-    return apiClient.get(
-      `/news-and-events/news-events-listing/by-link/${encodeURIComponent(
-        link
-      )}/`
-    );
+    return apiClient.get(`/news-and-events/news-events-listing/by-link/${encodeURIComponent(link)}/`);
   },
   getNewsEventsRecap: () => {
     return apiClient.get("/news-and-events/news-events-recap/");
@@ -183,9 +141,7 @@ const apiService = {
     return apiClient.get("/service/service-destination-listings/");
   },
   getEducationDestinationPageData: (slug) => {
-    return apiClient.get(
-      `/service/service-destination-banner-entry/?destination_slug=${slug}`
-    );
+    return apiClient.get(`/service/service-destination-banner-entry/?destination_slug=${slug}`);
   },
   getServiceCourseBanner: () => {
     return apiClient.get("/service/service-course-banner/");
@@ -218,19 +174,13 @@ const apiService = {
     return apiClient.get("/gallery/gallery-create/");
   },
   getGalleryDetailsByLink: (link) => {
-    return apiClient.get(
-      `/gallery/gallery-create/by-link/${encodeURIComponent(link)}/`
-    );
+    return apiClient.get(`/gallery/gallery-create/by-link/${encodeURIComponent(link)}/`);
   },
   getGalleryImagesByGalleryId: (galleryId) => {
-    return apiClient.get(
-      `/gallery/gallery-image-listing/?gallery=${galleryId}`
-    );
+    return apiClient.get(`/gallery/gallery-image-listing/?gallery=${galleryId}`);
   },
   getGalleryVideosByGalleryId: (galleryId) => {
-    return apiClient.get(
-      `/gallery/gallery-video-listing/?gallery=${galleryId}`
-    );
+    return apiClient.get(`/gallery/gallery-video-listing/?gallery=${galleryId}`);
   },
   getBlogBanner: () => {
     return apiClient.get("/blog/blog-banner/");
@@ -239,9 +189,7 @@ const apiService = {
     return apiClient.get("/blog/blog-post-create/");
   },
   getBlogPostByLink: (link) => {
-    return apiClient.get(
-      `/blog/blog-post-create/by-link/${encodeURIComponent(link)}/`
-    );
+    return apiClient.get(`/blog/blog-post-create/by-link/${encodeURIComponent(link)}/`);
   },
 };
 

@@ -55,13 +55,6 @@ class FreeEducationCourses(models.Model):
         ]
 
 class FreeCourseDetailPageBanner(models.Model):
-    course = models.ForeignKey(
-        FreeEducationCourses,
-        related_name='banners',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
     course_listing = models.ForeignKey(
         CourseListing,
         related_name='banners',
@@ -70,17 +63,11 @@ class FreeCourseDetailPageBanner(models.Model):
         blank=True
     )
     banner_image = models.ImageField(upload_to='course_page_images/', null=True, blank=True)
-    banner_title = models.TextField(null=True, blank=True)  # Changed to TextField
-    order = models.IntegerField(default=0)  # Added order field
+    banner_title = models.TextField(null=True, blank=True)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return self.banner_title or "Untitled Banner"
-
-    def clean(self):
-        if not self.course and not self.course_listing:
-            raise ValidationError("Either 'course' or 'course_listing' must be set.")
-        if self.course and self.course_listing:
-            raise ValidationError("Only one of 'course' or 'course_listing' can be set.")
 
     class Meta:
         ordering = ['order']
@@ -88,13 +75,6 @@ class FreeCourseDetailPageBanner(models.Model):
         verbose_name_plural = "Free Course Detail Page Banners"
 
 class FreeCourseDetailPageTab(models.Model):
-    course = models.ForeignKey(
-        FreeEducationCourses,
-        related_name='tabs',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
     course_listing = models.ForeignKey(
         CourseListing,
         related_name='tabs',
@@ -107,12 +87,6 @@ class FreeCourseDetailPageTab(models.Model):
 
     def __str__(self):
         return self.tab_name or "Untitled Tab"
-
-    def clean(self):
-        if not self.course and not self.course_listing:
-            raise ValidationError("Either 'course' or 'course_listing' must be set.")
-        if self.course and self.course_listing:
-            raise ValidationError("Only one of 'course' or 'course_listing' can be set.")
 
     class Meta:
         ordering = ['order']
@@ -138,13 +112,6 @@ class FreeCourseDetailPageTabContent(models.Model):
         verbose_name_plural = "Free Course Detail Page Tab Contents"
 
 class FreeCourseDetailPageWhyChooseTitle(models.Model):
-    course = models.ForeignKey(
-        FreeEducationCourses,
-        related_name='why_choose_titles',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
     course_listing = models.ForeignKey(
         CourseListing,
         related_name='why_choose_titles',
@@ -157,24 +124,11 @@ class FreeCourseDetailPageWhyChooseTitle(models.Model):
     def __str__(self):
         return self.title or "Untitled Why Choose Title"
 
-    def clean(self):
-        if not self.course and not self.course_listing:
-            raise ValidationError("Either 'course' or 'course_listing' must be set.")
-        if self.course and self.course_listing:
-            raise ValidationError("Only one of 'course' or 'course_listing' can be set.")
-
     class Meta:
         verbose_name = "Free Course Detail Page Why Choose Title"
         verbose_name_plural = "Free Course Detail Page Why Choose Titles"
 
 class FreeCourseDetailPageWhyChoose(models.Model):
-    course = models.ForeignKey(
-        FreeEducationCourses,
-        related_name='why_choose_items',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
     course_listing = models.ForeignKey(
         CourseListing,
         related_name='why_choose_items',
@@ -188,12 +142,6 @@ class FreeCourseDetailPageWhyChoose(models.Model):
 
     def __str__(self):
         return self.title or "Untitled Why Choose Item"
-
-    def clean(self):
-        if not self.course and not self.course_listing:
-            raise ValidationError("Either 'course' or 'course_listing' must be set.")
-        if self.course and self.course_listing:
-            raise ValidationError("Only one of 'course' or 'course_listing' can be set.")
 
     class Meta:
         ordering = ['order']

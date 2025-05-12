@@ -1,5 +1,5 @@
-import React from "react";
-import TextEditor from "../TextEditor";
+import React from 'react';
+import TextEditor from '../TextEditor';
 
 const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
   const handleFieldChange = (id, value) => {
@@ -14,9 +14,9 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
 
   const handleFileChange = (id, file) => {
     if (file) {
-      const maxSize = 5 * 1024 * 1024;
+      const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
-        alert("File size should not exceed 5MB.");
+        alert('File size should not exceed 5MB.');
         return;
       }
       handleFieldChange(id, file);
@@ -27,36 +27,34 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
     isSubmitted && field.showWarning && field.warning && !field.value;
 
   switch (field.type) {
-    case "textEditor":
+    case 'textEditor':
       const customStyle =
-        field.id === "content"
-          ? { height: "400px", border: "none", paddingBottom: "40px" }
+        field.id === 'content'
+          ? { height: '400px', border: 'none', paddingBottom: '40px' }
           : {};
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
           <TextEditor
-            label={field.label}
-            value={field.value || ""}
+            value={field.value || ''}
             onChange={(value) => handleFieldChange(field.id, value)}
             placeholder={`Write your ${field.label.toLowerCase()} here...`}
-            warningMessage={displayWarning ? field.warning : field.error}
             customStyle={customStyle}
+            warningMessage={displayWarning ? field.warning : field.error}
           />
-          {(field.error || displayWarning) && (
-            <p className="text-xs text-red-500 mt-1">
-              {field.error || field.warning}
-            </p>
-          )}
         </div>
       );
-    case "image":
+    case 'image':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
-          {field.value && typeof field.value === "string" && (
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
+          {field.value && typeof field.value === 'string' && (
             <p className="text-xs text-gray-600">
-              Current file: {field.value.split("/").pop()}
+              Current file: {field.value.split('/').pop()}
             </p>
           )}
           <input
@@ -72,13 +70,15 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "video":
+    case 'video':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
-          {field.value && typeof field.value === "string" && (
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
+          {field.value && typeof field.value === 'string' && (
             <p className="text-xs text-gray-600">
-              Current file: {field.value.split("/").pop()}
+              Current file: {field.value.split('/').pop()}
             </p>
           )}
           <input
@@ -94,13 +94,15 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "text":
+    case 'text':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
           <input
             type="text"
-            value={field.value || ""}
+            value={field.value || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm placeholder:italic placeholder:text-gray-600 placeholder:font-light focus:outline-none transition-all duration-200 bg-gray-100 hover:bg-gray-50"
             placeholder={`Write your ${field.label.toLowerCase()} here...`}
@@ -112,13 +114,15 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "number":
+    case 'number':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
           <input
             type="number"
-            value={field.value || ""}
+            value={field.value || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
             placeholder={`Write your ${field.label.toLowerCase()} here...`}
@@ -130,13 +134,15 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "url":
+    case 'url':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
           <input
             type="text"
-            value={field.value || ""}
+            value={field.value || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
             placeholder={`Write your ${field.label.toLowerCase()} here...`}
@@ -148,7 +154,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "checkbox":
+    case 'checkbox':
       return (
         <div className="flex items-center space-x-4">
           <label className="text-xs text-gray-800">{field.label}</label>
@@ -165,10 +171,12 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "radio":
+    case 'radio':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
           <input
             type="radio"
             name={field.id}
@@ -183,12 +191,14 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "select":
+    case 'select':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
           <select
-            value={field.value || ""}
+            value={field.value || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
           >
@@ -207,13 +217,15 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           )}
         </div>
       );
-    case "date":
+    case 'date':
       return (
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-800 mb-2">{field.label}</label>
+          <label className="block text-xs font-bold text-gray-800 mb-2">
+            {field.label}
+          </label>
           <input
             type="date"
-            value={field.value || ""}
+            value={field.value || ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
           />
