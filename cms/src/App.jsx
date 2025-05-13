@@ -20,6 +20,7 @@ import Blog from './pages/Main/Blog';
 import Gallery from './pages/Main/Gallery';
 import FreeEducation from './pages/Main/FreeEducation';
 import Courses from './pages/Main/Courses';
+import SocialMedia from './pages/SocialMedia';
 
 const DashboardPage = () => <div className="mt-14"><Dashboard /></div>;
 const HomePage = () => <div className="mt-14"><Home /></div>;
@@ -35,6 +36,7 @@ const BlogPage = () => <div className="mt-14"><Blog /></div>;
 const GalleryPage = () => <div className="mt-14"><Gallery /></div>;
 const FreeEducationPage = () => <div className="mt-14"><FreeEducation /></div>;
 const CoursesPage = () => <div className="mt-14"><Courses/></div>
+const SocialMediaPage = () => <div className="mt-14"><SocialMedia/></div>
 
 const PrivateRoute = ({ element }) => {
   const location = useLocation();
@@ -148,9 +150,13 @@ const router = createBrowserRouter([
         path: 'free-education-country-page-section',
         element: <PrivateRoute element={<FreeEducationPage />} />,
       },
-            {
+      {
         path: 'course-page-section',
         element: <PrivateRoute element={<CoursesPage />} />,
+      },
+      {
+        path: 'social-media',
+        element: <PrivateRoute element={<SocialMediaPage />} />,
       },
     ],
   },

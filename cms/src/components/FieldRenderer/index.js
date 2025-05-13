@@ -14,7 +14,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
 
   const handleFileChange = (id, file) => {
     if (file) {
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      const maxSize = 5 * 1024 * 1024; 
       if (file.size > maxSize) {
         alert('File size should not exceed 5MB.');
         return;

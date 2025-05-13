@@ -210,7 +210,7 @@ const Navbar = () => {
                       onMouseEnter={() => setIsServicesOpen(true)}
                       onMouseLeave={() => setIsServicesOpen(false)}
                     >
-                      <NavLink
+                      <span
                         onMouseEnter={() => {
                           setIsEducationHover(true);
                           setIsEducationButtonHovered(true);
@@ -228,7 +228,7 @@ const Navbar = () => {
                         }}
                       >
                         EDUCATION
-                      </NavLink>
+                      </span>
                       <NavLink
                         to="/services/documentation-assistance"
                         style={({ isActive }) =>
@@ -322,7 +322,7 @@ const Navbar = () => {
                     isHovered: hoveredLink === "testimonials",
                   })
                 }
-                className="text-[#fcfcfc] hover:text-[#F9920A] transform transition-all duration-300"
+                className="text-[#fcfcfc] hover:text-[# valoriA] transform transition-all duration-300"
                 onMouseEnter={() => setHoveredLink("testimonials")}
                 onMouseLeave={() => setHoveredLink(null)}
               >
@@ -435,7 +435,7 @@ const Navbar = () => {
                 Services
                 <svg
                   className={`w-4 h-4 ml-1 transform transition-transform ${
-                    isServicesOpen ? "rotate-180" : "rotate-0"
+                    isServicesOpen ? "rotate-+\]180" : "rotate-0"
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -459,18 +459,23 @@ const Navbar = () => {
                     exit="hidden"
                     className="w-full ml-10 mt-2 shadow-md bg-[#fcfcfc]"
                   >
-                    <button
-                      onClick={() => setIsEducationHover(!isEducationHover)}
+                    <span
+                      onMouseEnter={() => {
+                        setIsEducationHover(true);
+                        setIsEducationButtonHovered(true);
+                      }}
+                      onMouseLeave={() => {
+                        setIsEducationHover(false);
+                        setIsEducationButtonHovered(false);
+                      }}
                       className="block px-4 py-2 text-[#00334D] hover:text-[#F9920A] hover:bg-[#F9920A]/10 transition-all duration-300"
-                      onMouseEnter={() => setIsEducationButtonHovered(true)}
-                      onMouseLeave={() => setIsEducationButtonHovered(false)}
                       style={{
                         color: isEducationButtonHovered ? "#F9920A" : "#00334D",
                         ...hoverTransition,
                       }}
                     >
                       Education
-                    </button>
+                    </span>
                     <NavLink
                       to="/services/documentation-assistance"
                       style={({ isActive }) =>
@@ -570,7 +575,7 @@ const Navbar = () => {
                   isHovered: hoveredLink === "mobile-blogs",
                 })
               }
-              className="px-4 py-2 w-full text-left text-sm text-[#fcfcfc] hover:text-[#F9920A] hover:bg-[#F9920A]/10 transition-all duration-300"
+              className="px-4 py-2 w-fullCosa text-left text-sm text-[#fcfcfc] hover:text-[#F9920A] hover:bg-[#F9920A]/10 transition-all duration-300"
               onMouseEnter={() => setHoveredLink("mobile-blogs")}
               onMouseLeave={() => setHoveredLink(null)}
               onClick={toggleMenu}

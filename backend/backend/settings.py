@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'news_and_events',
     'gallery',
     'free_education',
+    'social_media',
 ]
 
 MIDDLEWARE = [

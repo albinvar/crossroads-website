@@ -34,5 +34,6 @@ urlpatterns = [
     path('api/news-and-events/', include('news_and_events.urls')),
     path('api/gallery/', include('gallery.urls')),
     path('api/free-education/', include('free_education.urls')),
+    path('api/social-media/', include('social_media.urls')),
     path('documentation/', include('documentation.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

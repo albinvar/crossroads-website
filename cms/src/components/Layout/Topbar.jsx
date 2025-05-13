@@ -11,8 +11,15 @@ const Topbar = ({ toggleSidebar, userAvatar, username }) => {
   const navigate = useNavigate();
 
   const getPageName = () => {
-    const path = location.pathname.split('/')[1];
-    return path.charAt(0).toUpperCase() + path.slice(1) || 'Dashboard';
+    const path = location.pathname.split('/')[1] || 'dashboard'; 
+    if (!path) return 'Dashboard';
+
+    return path
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+      .replace('Section', '') 
+      .trim();
   };
 
   const handleLogout = () => {
@@ -62,7 +69,7 @@ const Topbar = ({ toggleSidebar, userAvatar, username }) => {
             onChange={handleSearchChange}
             placeholder="Search here..."
             className="w-64 px-4 py-2 border border-gray-200 rounded-lg text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
-          />
+            />
         </div>
         <div className="ml-4 text-sm font-medium text-gray-800">
           {getPageName()}
@@ -125,7 +132,7 @@ const Topbar = ({ toggleSidebar, userAvatar, username }) => {
           </div>
         )}
         <div className="flex items-center space-x-2">
-        <img
+          <img
             src={userAvatar || 'https://placehold.co/80x80'} 
             alt="Profile"
             className="w-10 h-10 object-cover rounded-full cursor-pointer ml-2"

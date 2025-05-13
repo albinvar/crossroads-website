@@ -191,6 +191,9 @@ const apiService = {
   getBlogPostByLink: (link) => {
     return apiClient.get(`/blog/blog-post-create/by-link/${encodeURIComponent(link)}/`);
   },
+  getSocialMediaLinks: () => {
+    return apiClient.get("/social-media/social-media-links/");
+  },
 };
 
 export default apiService;

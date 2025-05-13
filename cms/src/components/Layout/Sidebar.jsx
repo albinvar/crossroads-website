@@ -9,8 +9,8 @@ import {
   Cog,
   ChevronDown,
   FolderCog,
+  Link2Icon,
 } from "lucide-react";
-import { label } from "framer-motion/client";
 
 const iconComponents = {
   LayoutDashboard: LayoutDashboard,
@@ -20,6 +20,7 @@ const iconComponents = {
   Cog: Cog,
   ChevronDown: ChevronDown,
   FolderCog: FolderCog,
+ Link2: Link2Icon
 };
 
 const cmsLinks = [
@@ -156,6 +157,15 @@ const Sidebar = ({ isOpen }) => {
       label: "CMS",
       icon: "FolderCog",
       links: cmsLinks,
+    },
+    {
+      type: "link",
+      to: "/social-media",
+      label: "Social Media Management",
+      icon: "Link2",
+      activeStyles: { background: "bg-blue-50", text: "text-blue-800" },
+      inactiveStyles: { text: "text-gray-800" },
+      hoverStyles: { background: "bg-gray-100", text: "text-gray-800" },
     },
     {
       type: "link",
