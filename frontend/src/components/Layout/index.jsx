@@ -7,17 +7,22 @@ const Layout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    };
+    scrollToTop();
+    const timeout = setTimeout(scrollToTop, 0);
+    return () => clearTimeout(timeout);
   }, [location]);
 
   return (
-    <>
+    <div>
       <Navbar />
       <main className="main-content">
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

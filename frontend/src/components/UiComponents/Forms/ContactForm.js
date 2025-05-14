@@ -239,7 +239,7 @@ const ContactForm = () => {
           <div className="md:col-span-2 flex justify-start">
             <button
               type="submit"
-              className="mt-2 text-gray-200 text-md bg-primary-orange hover:bg-primary-orange/80 rounded-full px-10 py-2.5 transition-colors duration-300"
+              className="mt-2 text-gray-200 hover:text-primary-dark text-md bg-primary-orange hover:bg-gray-100 rounded-full px-10 py-2.5 transition-colors duration-300"
             >
               Submit
             </button>
@@ -413,7 +413,7 @@ const ContactForm = () => {
           <div className="flex justify-center mb-8">
             <button
               type="submit"
-              className="text-gray-200 text-sm bg-primary-orange hover:bg-primary-orange/80 rounded-full px-8 py-2 transition-colors duration-300"
+              className="text-gray-200 hover:text-primary-dark text-sm bg-primary-orange hover:bg-gray-100 rounded-full px-8 py-2 transition-colors duration-300"
             >
               Submit
             </button>

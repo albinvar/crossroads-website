@@ -1,0 +1,77 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+
+# === Django ===
+*.log
+*.pot
+*.pyc
+db.sqlite3
+db.sqlite3-journal
+media/
+static/
+staticfiles/
+.env
+.env.*
+
+# === Venv ===
+venv/
+ENV/
+env/
+.venv/
+pip-selfcheck.json
+
+# === Django collectstatic output ===
+/backend/staticfiles/
+
+# === React (Vite) ===
+node_modules/
+dist/
+frontend/dist/
+
+# === Vite Cache ===
+.cache/
+.vite/
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+
+# === VSCode ===
+.vscode/
+
+# === JetBrains (PyCharm, WebStorm, etc) ===
+.idea/
+
+# === Coverage ===
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+# === Test and debug files ===
+test-results/
+.pytest_cache/
+nosetests.xml
+junit-*.xml
+
+# === Others ===
+*.sqlite3
+*.swp
+*.swo
+*.bak
+*.orig
+
+# === Git ===
+*.orig
+*.rej
+*.patch

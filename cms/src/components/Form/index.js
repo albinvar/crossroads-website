@@ -193,6 +193,8 @@ const Form = ({
   const [newEntries, setNewEntries] = useState([]);
   const rowsPerPage = 4;
   const charLimit = 50;
+  // Added refreshKey to trigger data refetch
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -204,7 +206,7 @@ const Form = ({
       }
     };
     fetchData();
-  }, [apiEndpoint]);
+  }, [apiEndpoint, refreshKey]); // Added refreshKey as a dependency
 
   const handleReorder = (newOrder) => {
     if (apiEndpoint === '/service/service-destination-listings/') {
@@ -220,6 +222,7 @@ const Form = ({
           setModalTitle('Success');
           setModalMessage('Order updated successfully.');
           setIsModalOpen(true);
+          setRefreshKey((prev) => prev + 1); // Trigger refetch
         })
         .catch((error) => {
           console.error('Error updating order:', error);
@@ -307,6 +310,7 @@ const Form = ({
       setModalTitle('Success');
       setModalMessage('Field updated successfully.');
       setIsModalOpen(true);
+      setRefreshKey((prev) => prev + 1); // Trigger refetch
     } catch (error) {
       console.error('Error updating field:', error);
       setModalTitle('Error');
@@ -358,6 +362,7 @@ const Form = ({
         setModalTitle('Success');
         setModalMessage('Multiple entries added successfully.');
         setIsModalOpen(true);
+        setRefreshKey((prev) => prev + 1); // Trigger refetch
       } catch (error) {
         console.error('Error adding entries:', error);
         setModalTitle('Error');
@@ -396,6 +401,7 @@ const Form = ({
         setModalTitle('Success');
         setModalMessage('Entry updated successfully.');
         setIsModalOpen(true);
+        setRefreshKey((prev) => prev + 1); // Trigger refetch
       } catch (error) {
         console.error('Error updating entry:', error);
         setModalTitle('Error');
@@ -433,6 +439,7 @@ const Form = ({
         setModalTitle('Success');
         setModalMessage('Entry added successfully.');
         setIsModalOpen(true);
+        setRefreshKey((prev) => prev + 1); // Trigger refetch
       } catch (error) {
         console.error('Error adding entry:', error);
         setModalTitle('Error');
@@ -452,6 +459,7 @@ const Form = ({
       setModalTitle('Success');
       setModalMessage('Entry deleted successfully.');
       setIsModalOpen(true);
+      setRefreshKey((prev) => prev + 1); // Trigger refetch
     } catch (error) {
       console.error('Error deleting entry:', error);
       setModalTitle('Error');
@@ -480,6 +488,7 @@ const Form = ({
       setModalTitle('Success');
       setModalMessage(`Field ${fieldId} deleted successfully.`);
       setIsModalOpen(true);
+      setRefreshKey((prev) => prev + 1); // Trigger refetch
     } catch (error) {
       console.error('Error deleting field:', error);
       setModalTitle('Error');

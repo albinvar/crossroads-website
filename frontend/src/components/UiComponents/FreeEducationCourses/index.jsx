@@ -98,11 +98,10 @@ const FreeEducationCourses = () => {
                       <Link
                         to={`/services/education/course/${card.link}`}
                         className="group flex items-center"
-                        style={{ color: '#F9920A' }}
                       >
-                        <span className="mr-2 text-lg lg:text-[14px] font-medium">Read More</span>
+                        <span className="mr-2 text-lg lg:text-[14px] font-medium text-primary-orange group-hover:text-gray-50 transition-colors duration-300">Read More</span>
                         <ArrowRight
-                          className="w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 fill-[#F9920A] group-hover:fill-[#E08200]"
+                          className="w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 fill-primary-orange group-hover:fill-gray-50"
                         />
                       </Link>
                     ) : (

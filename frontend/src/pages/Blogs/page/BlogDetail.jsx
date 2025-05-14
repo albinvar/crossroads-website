@@ -5,18 +5,19 @@ import Banner from '../../../components/Banner';
 import PropTypes from 'prop-types';
 import Icons from '../../../components/Icons';
 
-const SOCIAL_MEDIA_URLS = {
-    instagram: 'https://www.instagram.com/crossroads_ge/',
-    linkedIn: 'https://www.linkedin.com/company/crossroads-career-consultants-pvt-ltd/',
-    facebook: 'https://www.facebook.com/CrossroadsOverseasEducation'
-};
-
 const BlogDetail = () => {
     const [post, setPost] = useState(null);
     const [recentPosts, setRecentPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isCopied, setIsCopied] = useState(false);
+    const [socialLinks, setSocialLinks] = useState({
+        facebook: '',
+        instagram: '',
+        linkedin: '',
+        youtube: '',
+        whatsapp: '',
+    });
     const { link } = useParams();
     const navigate = useNavigate();
     const contentRef = useRef(null);
@@ -84,8 +85,34 @@ const BlogDetail = () => {
             }
         };
 
+        const fetchSocialMediaLinks = () => {
+            apiService
+                .getSocialMediaLinks()
+                .then((response) => {
+                    const data = response.data[0]; 
+                    setSocialLinks({
+                        facebook: data.facebook,
+                        instagram: data.instagram,
+                        linkedin: data.linkedin,
+                        youtube: data.youtube,
+                        whatsapp: data.whatsapp,
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error fetching social media links:', error);
+                    setSocialLinks({
+                        facebook: '',
+                        instagram: '',
+                        linkedin: '',
+                        youtube: '',
+                        whatsapp: '',
+                    });
+                });
+        };
+
         fetchBlogPost();
         fetchRecentPosts();
+        fetchSocialMediaLinks();
     }, [link, navigate]);
 
     const copyToClipboard = useCallback(async () => {
@@ -143,9 +170,11 @@ const BlogDetail = () => {
         <div className="flex flex-col items-center space-y-2 mt-8">
             <h3 className="text-lg font-semibold text-gray-800 pb-4">Share This Article</h3>
             <div className="flex space-x-4">
-                <SocialButton url={SOCIAL_MEDIA_URLS.instagram} label="Instagram">
-                    <Icons.Instagram />
-                </SocialButton>
+                {socialLinks.instagram && (
+                    <SocialButton url={socialLinks.instagram} label="Instagram">
+                        <Icons.Instagram />
+                    </SocialButton>
+                )}
                 <button
                     onClick={copyToClipboard}
                     aria-label="Copy page URL"
@@ -158,12 +187,16 @@ const BlogDetail = () => {
                         </span>
                     )}
                 </button>
-                <SocialButton url={SOCIAL_MEDIA_URLS.linkedIn} label="LinkedIn">
-                    <Icons.LinkedIn />
-                </SocialButton>
-                <SocialButton url={SOCIAL_MEDIA_URLS.facebook} label="Facebook">
-                    <Icons.Facebook />
-                </SocialButton>
+                {socialLinks.linkedin && (
+                    <SocialButton url={socialLinks.linkedin} label="LinkedIn">
+                        <Icons.LinkedIn />
+                    </SocialButton>
+                )}
+                {socialLinks.facebook && (
+                    <SocialButton url={socialLinks.facebook} label="Facebook">
+                        <Icons.Facebook />
+                    </SocialButton>
+                )}
             </div>
         </div>
     );

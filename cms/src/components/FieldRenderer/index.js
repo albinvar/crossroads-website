@@ -14,7 +14,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
 
   const handleFileChange = (id, file) => {
     if (file) {
-      const maxSize = 5 * 1024 * 1024; 
+      const maxSize = 5 * 1024 * 1024;
       if (file.size > maxSize) {
         alert('File size should not exceed 5MB.');
         return;
@@ -102,7 +102,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           </label>
           <input
             type="text"
-            value={field.value || ''}
+            value={field.value ?? ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm placeholder:italic placeholder:text-gray-600 placeholder:font-light focus:outline-none transition-all duration-200 bg-gray-100 hover:bg-gray-50"
             placeholder={`Write your ${field.label.toLowerCase()} here...`}
@@ -122,7 +122,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           </label>
           <input
             type="number"
-            value={field.value || ''}
+            value={field.value ?? ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
             placeholder={`Write your ${field.label.toLowerCase()} here...`}
@@ -142,7 +142,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           </label>
           <input
             type="text"
-            value={field.value || ''}
+            value={field.value ?? ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
             placeholder={`Write your ${field.label.toLowerCase()} here...`}
@@ -160,7 +160,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           <label className="text-xs text-gray-800">{field.label}</label>
           <input
             type="checkbox"
-            checked={field.value || false}
+            checked={field.value ?? false}
             onChange={(e) => handleFieldChange(field.id, e.target.checked)}
             className="w-4 h-4 text-blue-600 border-gray-200 rounded focus:ring-blue-200 focus:ring-2 transition-all duration-200 bg-gray-100"
           />
@@ -180,7 +180,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           <input
             type="radio"
             name={field.id}
-            checked={field.value || false}
+            checked={field.value ?? false}
             onChange={(e) => handleFieldChange(field.id, e.target.checked)}
             className="w-4 h-4 text-blue-600 border-gray-200 rounded focus:ring-blue-200 focus:ring-2 transition-all duration-200 bg-gray-100"
           />
@@ -198,7 +198,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
             {field.label}
           </label>
           <select
-            value={field.value || ''}
+            value={field.value ?? ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
           >
@@ -225,7 +225,7 @@ const FieldRenderer = ({ field, setFields, onChange, isSubmitted }) => {
           </label>
           <input
             type="date"
-            value={field.value || ''}
+            value={field.value ?? ''}
             onChange={(e) => handleFieldChange(field.id, e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 text-gray-800 text-sm italic placeholder:text-gray-600 placeholder:font-light focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-transparent transition-all duration-200 bg-gray-100 hover:bg-gray-50"
           />

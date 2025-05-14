@@ -1,31 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import Slider from 'react-slick';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import Slider from "react-slick";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import apiService from '../../../../api/apiService';
-import Button from '../../../../components/Button';
-import { Link, useNavigate } from 'react-router';
-import { ArrowRight } from '../../../../components/Icons';
+import apiService from "../../../../api/apiService";
+import Button from "../../../../components/Button";
+import { Link, useNavigate } from "react-router";
+import { ArrowRight } from "../../../../components/Icons";
 
 const limitCharacters = (text, maxLength) => {
-  if (!text || typeof text !== 'string') return '';
+  if (!text || typeof text !== "string") return "";
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 };
 
-const NewsEventsSection = ({ 
-  newsItems, 
-  setNewsItems, 
-  filterType = 'upcoming', 
-  currentEventLink = null, 
+const NewsEventsSection = ({
+  newsItems,
+  setNewsItems,
+  filterType = "upcoming",
+  currentEventLink = null,
   hideTitleAndDescription = false,
   isSlider = false,
-  showMoreButton = true
+  showMoreButton = true,
 }) => {
   const sliderRef = useRef(null);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
   const TITLE_MAX_LENGTH = 110;
@@ -36,8 +36,8 @@ const NewsEventsSection = ({
       setIsMobile(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -46,13 +46,17 @@ const NewsEventsSection = ({
     const fetchData = async () => {
       try {
         const [newsResponse, titleResponse] = await Promise.all([
-          apiService.getNewsEventsByTab(''),
+          apiService.getNewsEventsByTab(""),
           apiService.getNewsTitle(),
         ]);
 
         if (isMounted) {
           const now = new Date();
-          const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          const today = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+          );
           const transformedNews = newsResponse.data
             .map((news) => ({
               image: news.image,
@@ -65,22 +69,22 @@ const NewsEventsSection = ({
             .filter((news) => {
               const eventDate = new Date(news.date);
               const isUpcoming = eventDate >= today;
-              return filterType === 'upcoming' ? isUpcoming : !isUpcoming;
+              return filterType === "upcoming" ? isUpcoming : !isUpcoming;
             })
             .filter((news) => news.link !== currentEventLink)
             .sort((a, b) => new Date(a.date) - new Date(b.date))
             .slice(0, 4);
           setNewsItems(transformedNews);
           const titleData = titleResponse.data[0];
-          setTitle(titleData?.title || '');
-          setDescription(titleData?.description || '');
+          setTitle(titleData?.title || "");
+          setDescription(titleData?.description || "");
         }
       } catch (error) {
-        console.error('Error fetching news data:', error);
+        console.error("Error fetching news data:", error);
         if (isMounted) {
           setNewsItems([]);
-          setTitle('');
-          setDescription('');
+          setTitle("");
+          setDescription("");
         }
       }
     };
@@ -92,11 +96,11 @@ const NewsEventsSection = ({
     };
   }, [setNewsItems, filterType, currentEventLink]);
 
-const sliderSettings = {
+  const sliderSettings = {
     dots: false,
     infinite: newsItems?.length > 1,
     speed: 300,
-    slidesToShow: 4, 
+    slidesToShow: 4,
     slidesToScroll: 1,
     arrows: false,
     autoplay: true,
@@ -106,15 +110,15 @@ const sliderSettings = {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1, 
+          slidesToShow: 1,
           slidesToScroll: 1,
           infinite: newsItems?.length > 1,
         },
       },
       {
-        breakpoint: 1024, 
+        breakpoint: 1024,
         settings: {
-          slidesToShow: 2, 
+          slidesToShow: 2,
           slidesToScroll: 1,
           infinite: newsItems?.length > 2,
         },
@@ -135,7 +139,7 @@ const sliderSettings = {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: 'easeOut' },
+      transition: { duration: 0.8, ease: "easeOut" },
     },
   };
 
@@ -167,7 +171,7 @@ const sliderSettings = {
   };
 
   const handleShowMoreClick = () => {
-    navigate('/news-and-events');
+    navigate("/news-and-events");
   };
 
   if (newsItems === null || title === null || description === null) {
@@ -184,7 +188,8 @@ const sliderSettings = {
       >
         {hideTitleAndDescription ? (
           <h2 className="font-bold pb-8">
-            <span className='text-primary-dark'>Other</span> <span className='text-primary-orange'>Events</span>
+            <span className="text-primary-dark">Other</span>{" "}
+            <span className="text-primary-orange">Events</span>
           </h2>
         ) : (
           <>
@@ -200,7 +205,7 @@ const sliderSettings = {
       <div className="bottom-arrows">
         {newsItems && newsItems.length > 0 ? (
           <>
-            {(isMobile || isSlider) ? (
+            {isMobile || isSlider ? (
               <>
                 <Slider ref={sliderRef} {...sliderSettings}>
                   {newsItems.map((item, index) => (
@@ -214,38 +219,56 @@ const sliderSettings = {
                         <div className="h-full news-card bg-white rounded-lg overflow-hidden group">
                           <div className="relative mx-4">
                             <img
-                              src={item.image || 'https://via.placeholder.com/300x200?text=No+Image'}
-                              alt={limitCharacters(item.title, TITLE_MAX_LENGTH) || 'Event Image'}
+                              src={
+                                item.image ||
+                                "https://via.placeholder.com/300x200?text=No+Image"
+                              }
+                              alt={
+                                limitCharacters(item.title, TITLE_MAX_LENGTH) ||
+                                "Event Image"
+                              }
                               className="transition-all duration-300 rounded-lg grayscale group-hover:grayscale-0"
                               onError={(e) => {
-                                e.target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found';
-                                console.error(`Failed to load image: ${item.image}`);
+                                e.target.src =
+                                  "https://via.placeholder.com/300x200?text=Image+Not+Found";
+                                console.error(
+                                  `Failed to load image: ${item.image}`
+                                );
                               }}
                             />
                             <Button
                               label="Register Now"
-                              className="absolute top-4 left-4 text-white text-md bg-primary-orange hover:bg-primary-orange/80 rounded-full px-4 py-2 transition-colors duration-300"
+                              className="absolute top-4 left-4 text-white text-md bg-primary-orange hover:bg-primary-dark rounded-full px-4 py-2 transition-colors duration-300"
                             />
                           </div>
                           <div className="p-4 flex flex-col flex-grow">
                             <div
                               dangerouslySetInnerHTML={{
-                                __html: limitCharacters(item.title, TITLE_MAX_LENGTH) || 'Untitled Event',
+                                __html:
+                                  limitCharacters(
+                                    item.title,
+                                    TITLE_MAX_LENGTH
+                                  ) || "Untitled Event",
                               }}
                             />
                             <div
                               className="mt-2 flex-grow"
                               dangerouslySetInnerHTML={{
-                                __html: limitCharacters(item.description, DESCRIPTION_MAX_LENGTH) || 'No description available.',
-                              }} />
+                                __html:
+                                  limitCharacters(
+                                    item.description,
+                                    DESCRIPTION_MAX_LENGTH
+                                  ) || "No description available.",
+                              }}
+                            />
                             <Link
                               to={`/news-and-events/${item.link}`}
-                              className="mt-4 group text-primary-dark flex items-center hover:text-primary-dark-hover transition-colors duration-300"
+                              className="mt-4 group flex items-center justify-center md:justify-start text-primary-dark group-hover:text-primary-orange transition-colors duration-300"
                             >
-                              <span className="mr-2 text-lg lg:text-[14px] font-medium">Read More</span>
-                              <ArrowRight
-                                className="w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 fill-primary-dark group-hover:fill-primary-dark-hover"
-                              />
+                              <span className="font-medium text-xs sm:text-sm md:text-md lg:text-md mr-2">
+                                Read More
+                              </span>
+                              <ArrowRight className="transition-colors duration-300 fill-primary-dark group-hover:fill-primary-orange w-4 h-4 sm:w-5 sm:h-5" />
                             </Link>
                           </div>
                         </div>
@@ -279,45 +302,63 @@ const sliderSettings = {
                     animate="visible"
                     transition={{ delay: index * 0.1 }}
                   >
+                  <Link
+                    to={`/news-and-events/${item.link}`}>
                     <div className="h-full news-card bg-white rounded-lg overflow-hidden group">
                       <div className="relative mx-4">
                         <img
-                          src={item.image || 'https://via.placeholder.com/300x200?text=No+Image'}
-                          alt={limitCharacters(item.title, TITLE_MAX_LENGTH) || 'Event Image'}
+                          src={
+                            item.image ||
+                            "https://via.placeholder.com/300x200?text=No+Image"
+                          }
+                          alt={
+                            limitCharacters(item.title, TITLE_MAX_LENGTH) ||
+                            "Event Image"
+                          }
                           className="transition-all duration-300 rounded-lg grayscale group-hover:grayscale-0"
                           onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found';
-                            console.error(`Failed to load image: ${item.image}`);
+                            e.target.src =
+                              "https://via.placeholder.com/300x200?text=Image+Not+Found";
+                            console.error(
+                              `Failed to load image: ${item.image}`
+                            );
                           }}
                         />
                         <Button
                           label="Register Now"
-                          className="absolute top-4 left-4 text-white text-md bg-primary-orange hover:bg-primary-orange/80 rounded-full px-4 py-2 transition-colors duration-300"
+                          className="absolute top-4 left-4 text-white text-md bg-primary-orange hover:bg-primary-dark rounded-full px-4 py-2 transition-colors duration-300"
                         />
                       </div>
                       <div className="p-4 flex flex-col flex-grow">
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: limitCharacters(item.title, TITLE_MAX_LENGTH) || 'Untitled Event',
+                            __html:
+                              limitCharacters(item.title, TITLE_MAX_LENGTH) ||
+                              "Untitled Event",
                           }}
                         />
                         <div
                           className="mt-2 flex-grow"
                           dangerouslySetInnerHTML={{
-                            __html: limitCharacters(item.description, DESCRIPTION_MAX_LENGTH) || 'No description available.',
+                            __html:
+                              limitCharacters(
+                                item.description,
+                                DESCRIPTION_MAX_LENGTH
+                              ) || "No description available.",
                           }}
                         />
                         <Link
                           to={`/news-and-events/${item.link}`}
-                          className="mt-4 group text-primary-dark flex items-center hover:text-primary-dark-hover transition-colors duration-300"
+                          className="mt-4 flex items-center justify-center md:justify-start text-primary-dark group-hover:text-primary-orange transition-colors duration-300"
                         >
-                          <span className="mr-2 text-lg lg:text-[14px] font-medium">Read More</span>
-                          <ArrowRight
-                            className="w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 fill-primary-dark group-hover:fill-primary-dark-hover"
-                          />
+                          <span className="font-medium text-xs sm:text-sm md:text-md lg:text-md mr-2">
+                            Read More
+                          </span>
+                          <ArrowRight className="transition-colors duration-300 fill-primary-dark group-hover:fill-primary-orange w-4 h-4 sm:w-5 sm:h-5" />
                         </Link>
                       </div>
                     </div>
+                    </Link>
                   </motion.div>
                 ))}
               </motion.div>

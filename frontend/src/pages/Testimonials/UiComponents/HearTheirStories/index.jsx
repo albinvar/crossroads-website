@@ -215,7 +215,7 @@ const HearTheirStories = () => {
                 ))}
               </Slider>
               {testimonials.length > 6 && (
-                <div className="flex justify-center gap-6 mt-10">
+                <div className="flex justify-center gap-6 mt-10 lg:mt-12">
                   <button
                     onClick={() => handleNavigation('prev')}
                     aria-label="Previous Slide"

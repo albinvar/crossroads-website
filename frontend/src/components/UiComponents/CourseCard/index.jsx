@@ -22,7 +22,7 @@ const CourseCard = ({ title, description, image, link }) => {
             className="mt-2"
             dangerouslySetInnerHTML={{ __html: description }}
           />
-          <div className="mt-4 px-4 py-2 text-sm text-white bg-[#F9920A] hover:bg-[#E08200] transition-all duration-300 rounded-full inline-block">
+          <div className="mt-4 px-4 py-2 text-sm text-white bg-primary-orange hover:bg-primary-dark transition-all duration-300 rounded-full inline-block">
             More Details
           </div>
         </div>

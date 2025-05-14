@@ -32,7 +32,7 @@ const Footer = () => {
               </span>
               <div className="flex items-center space-x-4 mt-4 md:mt-4 lg:mt-0">
                 <button
-                  className="bg-[#F9920A] hover:bg-[#F9920A]/80 text-gray-100 py-3 px-8 rounded-full transition-all duration-300 shadow-xl shadow-gray-400"
+                  className="bg-[#F9920A] hover:bg-primary-dark text-gray-100 py-3 px-8 rounded-full transition-all duration-300 shadow-xl shadow-gray-500"
                   onClick={() => setShowModal(true)}
                 >
                   <span className='flex items-center justify-between'>

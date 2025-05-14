@@ -48,10 +48,10 @@ const AboutSection = ({ aboutData, setAboutData }) => {
                 <div>
                   <Link
                     to={aboutData.link}
-                    className="flex items-center justify-center md:justify-start text-primary-dark hover:text-primary-dark-hover transition-colors duration-300"
+                    className="group flex items-center justify-center md:justify-start text-primary-dark hover:text-primary-orange transition-colors duration-300"
                   >
                     <span className="font-medium text-xs sm:text-sm md:text-md lg:text-md mr-2">Read More</span>
-                    <ArrowRight className="transition-colors duration-300 group-hover:fill-primary-dark-hover/80 w-4 h-4 sm:w-5 sm:h-5" />
+                    <ArrowRight className="transition-colors duration-300 fill-primary-dark group-hover:fill-primary-orange w-4 h-4 sm:w-5 sm:h-5" />
                   </Link>
                 </div>
               </div>

@@ -4,4 +4,4 @@ from .models import SocialMedia
 class SocialMediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialMedia
-        fields = ['facebook', 'instagram', 'linkedin', 'youtube', 'whatsapp']
+        fields = '__all__'

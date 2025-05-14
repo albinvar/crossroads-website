@@ -5,7 +5,7 @@ class SocialMedia(models.Model):
     instagram = models.URLField(max_length=255, blank=True, null=True)
     linkedin = models.URLField(max_length=255, blank=True, null=True)
     youtube = models.URLField(max_length=255, blank=True, null=True)
-    whatsapp = models.CharField(max_length=20, blank=True, null=True)  
+    whatsapp = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         verbose_name = "Social Media"
