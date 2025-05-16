@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: import.meta.env.VITE_BASE_API_URL + '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -9,10 +9,8 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-
     let token = localStorage.getItem('access_token');
     if (!token) {
-
       token = sessionStorage.getItem('access_token');
     }
     if (token) {
@@ -30,12 +28,11 @@ apiClient.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-
         const refreshToken = localStorage.getItem('refresh_token') || sessionStorage.getItem('refresh_token');
         if (!refreshToken) {
           throw new Error('No refresh token available');
         }
-        const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+        const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/api/token/refresh/`, {
           refresh: refreshToken,
         });
         const { access } = response.data;
