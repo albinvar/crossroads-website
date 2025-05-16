@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TestimonialCard from '../../../../components/UiComponents/TestimonialCard';
 import apiService from '../../../../api/apiService';
 import { motion, AnimatePresence } from 'framer-motion';
-import Slider from 'react-slick';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-
+ 
 const sectionVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.5 } },
 };
-
+ 
 const tabContainerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -21,12 +17,12 @@ const tabContainerVariants = {
     },
   },
 };
-
+ 
 const tabVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
-
+ 
 const cardContainerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -36,26 +32,32 @@ const cardContainerVariants = {
     },
   },
 };
-
+ 
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
   exit: { opacity: 0, y: -30, transition: { duration: 0.3 } },
 };
-
+ 
 const HearTheirStories = () => {
   const [activeTab, setActiveTab] = useState('');
   const [testimonials, setTestimonials] = useState([]);
   const [tabs, setTabs] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const sectionRef = useRef(null);
+  const cardsPerSlide = 6;
+ 
   useEffect(() => {
     const fetchTabs = async () => {
       try {
         const response = await apiService.getTestimonialsTab();
         const data = response.data.map(tab => tab.tab_name);
+        console.log('Tabs fetched:', data);
         setTabs(data);
         if (data.length > 0) {
           setActiveTab(data[0]);
+        } else {
+          console.log('No tabs available');
         }
       } catch (error) {
         console.error('Error fetching testimonial tabs:', error);
@@ -63,10 +65,10 @@ const HearTheirStories = () => {
     };
     fetchTabs();
   }, []);
-
+ 
   useEffect(() => {
     if (!activeTab) return;
-
+ 
     const fetchTestimonials = async () => {
       try {
         const response = await apiService.getTestimonialsTab();
@@ -94,60 +96,79 @@ const HearTheirStories = () => {
               description: item.description,
             })),
           ];
+          console.log(`Testimonials for tab ${activeTab}:`, combinedTestimonials);
           setTestimonials(combinedTestimonials);
+          setCurrentPage(1);
+        } else {
+          console.log(`No testimonials for tab ${activeTab}`);
+          setTestimonials([]);
         }
       } catch (error) {
         console.error(`Error fetching testimonials for tab ${activeTab}:`, error);
+        setTestimonials([]);
       }
     };
     fetchTestimonials();
   }, [activeTab]);
-
+ 
   const handleTabClick = (tab) => {
+    console.log('Tab clicked:', tab);
     setActiveTab(tab);
+    setCurrentPage(1);
+    sectionRef.current.scrollIntoView({ behavior: 'smooth' });
   };
-
-  const sliderSettings = {
-    dots: false,
-    infinite: testimonials.length > 6,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    variableWidth: false,
+ 
+  const chunkArray = (array, size) => {
+    if (!array || array.length === 0) return [];
+    const result = [];
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size));
+    }
+    return result;
   };
-
-  const sliderRef = React.useRef(null);
-
-  const handleNavigation = (direction) => {
-    if (direction === 'prev') {
-      sliderRef.current.slickPrev();
-    } else {
-      sliderRef.current.slickNext();
+ 
+  const testimonialSlides = chunkArray(testimonials, cardsPerSlide);
+  const totalPages = testimonialSlides.length;
+  console.log('Testimonials length:', testimonials.length, 'Total pages:', totalPages, 'Current page:', currentPage, 'Should show pagination:', testimonials.length > 0);
+ 
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      console.log('Previous page clicked, new page:', currentPage - 1);
+      setCurrentPage(currentPage - 1);
+      sectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  const chunkTestimonials = (arr, size) => {
-    const chunks = [];
-    for (let i = 0; i < arr.length; i += size) {
-      chunks.push(arr.slice(i, i + size));
+ 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      console.log('Next page clicked, new page:', currentPage + 1);
+      setCurrentPage(currentPage + 1);
+      sectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-    return chunks;
   };
-
-  const testimonialChunks = chunkTestimonials(testimonials, 6);
-
+ 
+  const handlePageChange = (pageNumber) => {
+    console.log('Page change to:', pageNumber);
+    setCurrentPage(pageNumber);
+    sectionRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+ 
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+ 
   if (tabs.length === 0) {
+    console.log('Rendering null due to no tabs');
     return null;
   }
-
+ 
   return (
     <motion.section
+      ref={sectionRef}
+      className="py-8 px-4 sm:px-6 lg:px-8 bg-white"
       variants={sectionVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="mx-auto px-4">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center space-y-6">
           <h2 className="text-4xl font-bold">
             <span style={{ color: '#00334D' }}>Hear </span>
@@ -157,7 +178,7 @@ const HearTheirStories = () => {
             Discover the journeys of individuals who transformed ambition into achievement with Crossroads.
           </p>
         </div>
-
+ 
         <motion.div
           className="flex flex-wrap gap-4 justify-center space-x-0 lg:space-x-4 mt-8 mb-16"
           variants={tabContainerVariants}
@@ -168,10 +189,10 @@ const HearTheirStories = () => {
             <motion.button
               key={tab}
               onClick={() => handleTabClick(tab)}
-              className={`w-72 h-16 lg:w-48 lg:h-10 rounded-full transition ${
+              className={`w-72 h-16 lg:w-48 lg:h-10 rounded-full transition text-sm font-medium ${
                 activeTab === tab
                   ? 'bg-[#F9920A] text-white'
-                  : 'text-primary-dark border border-[#F9920A] hover:bg-[#F9920A] hover:text-white'
+                  : 'text-[#00334D] border border-[#F9920A] hover:bg-[#F9920A] hover:text-white'
               }`}
               variants={tabVariants}
             >
@@ -179,7 +200,7 @@ const HearTheirStories = () => {
             </motion.button>
           ))}
         </motion.div>
-
+ 
         <AnimatePresence mode="wait">
           {testimonials.length > 0 ? (
             <motion.div
@@ -188,47 +209,68 @@ const HearTheirStories = () => {
               animate="visible"
               key={activeTab}
             >
-              <Slider ref={sliderRef} {...sliderSettings}>
-                {testimonialChunks.map((chunk, chunkIndex) => (
-                  <div key={chunkIndex} className="p-3">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      {chunk.map((testimonial, index) => (
-                        <motion.div
-                          key={testimonial.id || index}
-                          variants={cardVariants}
-                          initial="hidden"
-                          animate="visible"
-                          exit="exit"
-                        >
-                          <TestimonialCard
-                            name={testimonial.name}
-                            description={testimonial.description}
-                            image={testimonial.type === 'image' ? testimonial.image : null}
-                            video={testimonial.type === 'video' ? testimonial.video : null}
-                            flag={testimonial.flag}
-                            rating={testimonial.rating}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {testimonialSlides[currentPage - 1]?.map((testimonial, index) => (
+                  <motion.div
+                    key={testimonial.id || index}
+                    variants={cardVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    <TestimonialCard
+                      name={testimonial.name}
+                      description={testimonial.description}
+                      image={testimonial.type === 'image' ? testimonial.image : null}
+                      video={testimonial.type === 'video' ? testimonial.video : null}
+                      flag={testimonial.flag}
+                      rating={testimonial.rating}
+                    />
+                  </motion.div>
                 ))}
-              </Slider>
-              {testimonials.length > 6 && (
-                <div className="flex justify-center gap-6 mt-10 lg:mt-12">
+              </div>
+ 
+              {testimonials.length > 0 && (
+                <div className="flex justify-center items-center mt-6 sm:mt-8 space-x-2">
                   <button
-                    onClick={() => handleNavigation('prev')}
-                    aria-label="Previous Slide"
-                    className="w-6 h-6 text-gray-400 hover:text-primary-dark transition-colors duration-300"
+                    onClick={handlePrevPage}
+                    className={`px-3 py-1 rounded text-sm font-medium ${
+                      currentPage === 1
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-[#F9920A] hover:text-[#e07a00]'
+                    }`}
+                    disabled={currentPage === 1}
+                    aria-label="Previous Page"
                   >
-                    <FaChevronLeft className="w-6 h-6" />
+                    Prev
                   </button>
+ 
+                  {pageNumbers.map((number) => (
+                    <button
+                      key={number}
+                      onClick={() => handlePageChange(number)}
+                      className={`px-3 py-1 rounded text-sm font-medium ${
+                        currentPage === number
+                          ? 'bg-[#F9920A] text-white'
+                          : 'text-[#F9920A] hover:text-[#e07a00]'
+                      }`}
+                      aria-label={`Page ${number}`}
+                    >
+                      {number}
+                    </button>
+                  ))}
+ 
                   <button
-                    onClick={() => handleNavigation('next')}
-                    aria-label="Next Slide"
-                    className="w-6 h-6 text-gray-400 hover:text-primary-dark transition-colors duration-300"
+                    onClick={handleNextPage}
+                    className={`px-3 py-1 rounded text-sm font-medium ${
+                      currentPage === totalPages
+                        ? 'text-gray-400 cursor-not-allowed'
+                        : 'text-[#F9920A] hover:text-[#e07a00]'
+                    }`}
+                    disabled={currentPage === totalPages}
+                    aria-label="Next Page"
                   >
-                    <FaChevronRight className="w-6 h-6" />
+                    Next
                   </button>
                 </div>
               )}
@@ -249,5 +291,5 @@ const HearTheirStories = () => {
     </motion.section>
   );
 };
-
+ 
 export default HearTheirStories;

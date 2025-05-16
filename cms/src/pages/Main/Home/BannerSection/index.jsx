@@ -35,6 +35,14 @@ const BannerSection = () => {
       warning: "Please enter the course slug (e.g., mbbs).",
       showWarning: true,
     },
+    {
+      id: "button_name",
+      type: "text",
+      label: "Button Name (e.g., Learn More).",
+      value: "",
+      warning: "Please enter the button name",
+      showWarning: true,
+    },
   ];
 
   const [mainSet, setMainSet] = useState(initialFields);

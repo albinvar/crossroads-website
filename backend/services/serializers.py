@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ServiceHighlights, DocumentationAssistanceBanner, LanguageLabBanner, CountryServiceBanner, CourseServiceBanner, DocumentationAssistanceTab, DocumentationAssistanceListing, LanguageLabListing, Destination, DestinationDedicatedKeyFact, DestinationDedicatedPage, DestinationDedicatedChooseTitle, DestinationDedicatedChooseList, DestinationDedicatedIntakeInformation, DestinationDedicatedAssistance
+from .models import ServiceHighlights, DocumentationAssistanceBanner, LanguageLabBanner, CountryServiceBanner, CourseServiceBanner, DocumentationAssistanceTab, DocumentationAssistanceListing, LanguageLabListing, Destination, DestinationDedicatedKeyFact, DestinationDedicatedPage, DestinationDedicatedChooseTitle, DestinationDedicatedChooseList, DestinationDedicatedIntakeInformation, DestinationDedicatedAssistance, DestinationDedicatedOurCourses, DestinationDedicatedOurCoursesTitle
 
 class ServiceHighlightsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,6 +37,24 @@ class CountryServiceBannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryServiceBanner
         fields = '__all__'
+        
+class DestinationDedicatedOurCoursesTitleSerializer(serializers.ModelSerializer):
+    subcategory = serializers.PrimaryKeyRelatedField(
+        queryset=DestinationDedicatedPage.objects.all()
+    )
+
+    class Meta:
+        model = DestinationDedicatedOurCoursesTitle
+        fields = ['id', 'subcategory', 'title']
+
+class DestinationDedicatedOurCoursesSerializer(serializers.ModelSerializer):
+    subcategory = serializers.PrimaryKeyRelatedField(
+        queryset=DestinationDedicatedPage.objects.all()
+    )
+
+    class Meta:
+        model = DestinationDedicatedOurCourses
+        fields = ['id', 'subcategory', 'image', 'title', 'description', 'order']
 
 class DestinationDedicatedAssistanceSerializer(serializers.ModelSerializer):
     subcategory = serializers.PrimaryKeyRelatedField(
@@ -88,7 +106,9 @@ class DestinationDedicatedPageSerializer(serializers.ModelSerializer):
     choose_title = DestinationDedicatedChooseTitleSerializer(many=True, read_only=True)
     choose_list = DestinationDedicatedChooseListSerializer(many=True, read_only=True)
     intake_information = DestinationDedicatedIntakeInformationSerializer(many=True, read_only=True)
-    virtual_assistance =  DestinationDedicatedAssistanceSerializer(many=True, read_only=True)
+    virtual_assistance = DestinationDedicatedAssistanceSerializer(many=True, read_only=True)
+    our_courses_title = DestinationDedicatedOurCoursesTitleSerializer(many=True, read_only=True)
+    our_courses_listing = DestinationDedicatedOurCoursesSerializer(many=True, read_only=True)  # Updated
     destination = serializers.SlugRelatedField(
         slug_field='slug',
         queryset=Destination.objects.all()
@@ -108,6 +128,8 @@ class DestinationDedicatedPageSerializer(serializers.ModelSerializer):
             'choose_list',
             'intake_information',
             'virtual_assistance',
+            'our_courses_title',
+            'our_courses_listing',  
         ]
 
 class DestinationSerializer(serializers.ModelSerializer):

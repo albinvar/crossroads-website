@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowDown } from '../../../../../../components/Icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import Modal from '../../../../../../components/Modal';
 
 const IntakeSection = ({ whyChoose, intake }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -25,7 +26,18 @@ const IntakeSection = ({ whyChoose, intake }) => {
     closed: { rotate: 0 },
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
+    <>
     <section className="min-h-screen w-full flex flex-col lg:flex-row">
       <div className="w-full lg:w-1/2 bg-[#00334D] px-4 md:px-16 py-8 md:py-16 flex flex-col justify-start">
         <div
@@ -132,12 +144,18 @@ const IntakeSection = ({ whyChoose, intake }) => {
               dangerouslySetInnerHTML={{ __html: intake.additional }}
             />
           </div>
-          <button className="mt-2 ml-6 bg-primary-orange hover:bg-[#fcfcfc] text-white hover:text-primary-dark text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 ease-in-out">
+          <button className="mt-2 ml-6 bg-primary-orange hover:bg-[#fcfcfc] text-white hover:text-primary-dark text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 ease-in-out"
+          onClick={openModal} >
             For more details click here
           </button>
         </motion.div>
       </div>
     </section>
+
+    <AnimatePresence>
+      {isModalOpen && <Modal onClose={closeModal} />}
+    </AnimatePresence>
+    </>
   );
 };
 

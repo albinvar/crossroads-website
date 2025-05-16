@@ -4,8 +4,8 @@ import Banner from "../../../../../components/Banner";
 import apiService from "../../../../../api/apiService";
 import IntakeSection from "./UiComponents/IntakeSection";
 import VirtualAssistance from "./UiComponents/VirtualAssistance";
-import OurValues from "../../../../About/UiComponents/OurValues";
 import ContactInformation from "../../../../../components/UiComponents/ContactInformation";
+import OurCourses from "../../../UiComponents/OurCourses";
 
 const DedicatedCountryService = () => {
   const { slug } = useParams();
@@ -36,6 +36,10 @@ const DedicatedCountryService = () => {
   const [assistanceData, setAssistanceData] = useState({
     title: "<h2>Virtual Assistance</h2>",
     description: "<p>Contact us for virtual assistance and support.</p>",
+  });
+  const [coursesData, setCoursesData] = useState({
+    title: "<h2>Our Courses</h2>",
+    courses: [],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -75,25 +79,32 @@ const DedicatedCountryService = () => {
         }));
         setKeyFacts(facts);
 
-        const chooseTitleData = Array.isArray(subcategory.choose_title) && subcategory.choose_title.length > 0 
-          ? subcategory.choose_title[0] 
-          : {};
+        const chooseTitleData =
+          Array.isArray(subcategory.choose_title) &&
+          subcategory.choose_title.length > 0
+            ? subcategory.choose_title[0]
+            : {};
         setChooseData({
           title: chooseTitleData.title || "<h2>Why Choose This Country?</h2>",
           image: chooseTitleData.image || "",
           description:
             chooseTitleData.description ||
             "<p>This destination offers a wide range of opportunities.</p>",
-          list: (Array.isArray(subcategory.choose_list) ? subcategory.choose_list : []).map((item) => ({
+          list: (Array.isArray(subcategory.choose_list)
+            ? subcategory.choose_list
+            : []
+          ).map((item) => ({
             listTitle: item.list_title || "<h4>No Title</h4>",
             listDescription:
               item.list_description || "<p>No description available.</p>",
           })),
         });
 
-        const intakeInfo = Array.isArray(subcategory.intake_information) && subcategory.intake_information.length > 0 
-          ? subcategory.intake_information[0] 
-          : {};
+        const intakeInfo =
+          Array.isArray(subcategory.intake_information) &&
+          subcategory.intake_information.length > 0
+            ? subcategory.intake_information[0]
+            : {};
         setIntakeData({
           title:
             intakeInfo.intake_information_title || "<h3>Intake Information</h3>",
@@ -106,14 +117,34 @@ const DedicatedCountryService = () => {
             "<p><strong>Additional Info:</strong> Contact support for details.</p>",
         });
 
-        const assistanceInfo = Array.isArray(subcategory.virtual_assistance) && subcategory.virtual_assistance.length > 0 
-          ? subcategory.virtual_assistance[0] 
-          : {};
+        const assistanceInfo =
+          Array.isArray(subcategory.virtual_assistance) &&
+          subcategory.virtual_assistance.length > 0
+            ? subcategory.virtual_assistance[0]
+            : {};
         setAssistanceData({
           title: assistanceInfo.title || "<h2>Virtual Assistance</h2>",
           description:
             assistanceInfo.description ||
             "<p>Contact us for virtual assistance and support.</p>",
+        });
+
+        const coursesTitle =
+          Array.isArray(subcategory.our_courses_title) &&
+          subcategory.our_courses_title.length > 0
+            ? subcategory.our_courses_title[0]
+            : {};
+        const coursesList = Array.isArray(subcategory.our_courses_listing)
+          ? subcategory.our_courses_listing
+          : [];
+        setCoursesData({
+          title: coursesTitle.title || "<h2>Our Courses</h2>",
+          courses: coursesList.map((course) => ({
+            image: course.image || "",
+            title: course.title || "No title",
+            description: course.description || "No description",
+            order: course.order || 0,
+          })),
         });
       })
       .catch((err) => {
@@ -172,9 +203,7 @@ const DedicatedCountryService = () => {
           ) : (
             <p className="text-base text-gray-600">
               No key facts available for{" "}
-              <span
-                dangerouslySetInnerHTML={{ __html: countryData.cardTitle }}
-              />
+              <span dangerouslySetInnerHTML={{ __html: countryData.cardTitle }} />
               . Please contact support for more information.
             </p>
           )}
@@ -187,10 +216,10 @@ const DedicatedCountryService = () => {
         <VirtualAssistance assistance={assistanceData} />
       </section>
       <section className="pb-8 sm:pb-8 lg:pb-16">
-        <OurValues/>
+        <OurCourses coursesData={coursesData} />
       </section>
       <div className="px-4 sm:px-4 lg:px-28 mb-16 sm:mb-16 lg:mb-36">
-          <ContactInformation />
+        <ContactInformation />
       </div>
     </>
   );

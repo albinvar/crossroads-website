@@ -4,6 +4,8 @@ import logo from "../../assets/images/logo-footer.webp";
 import SocialMedia from '../SocialMedia';
 import shadow from "../../assets/images/shadow.webp";
 import { Like, Telephone } from '../Icons';
+import Modal from '../Modal';
+import { AnimatePresence } from 'framer-motion';
 
 const servicesData = {
   title: 'Services',
@@ -19,6 +21,16 @@ const servicesData = {
 
 const Footer = () => {
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
 
   return (
     <>
@@ -33,7 +45,7 @@ const Footer = () => {
               <div className="flex items-center space-x-4 mt-4 md:mt-4 lg:mt-0">
                 <button
                   className="bg-[#F9920A] hover:bg-primary-dark text-gray-100 py-3 px-8 rounded-full transition-all duration-300 shadow-xl shadow-gray-500"
-                  onClick={() => setShowModal(true)}
+                  onClick={openModal}
                 >
                   <span className='flex items-center justify-between'>
                     <span className='text-md font-one'>
@@ -115,8 +127,8 @@ const Footer = () => {
                   <Link
                     to="/terms-and-conditions"
                     className={`text-white hover:text-[#F9920A] transition-colors duration-300 text-md lg:text-base ${location.pathname === "/terms-and-conditions"
-                        ? "text-[#F9920A]"
-                        : ""
+                      ? "text-[#F9920A]"
+                      : ""
                       }`}
                   >
                     Terms and Conditions
@@ -124,8 +136,8 @@ const Footer = () => {
                   <Link
                     to="/privacy-policy"
                     className={`text-white hover:text-[#F9920A] transition-colors duration-300 text-md lg:text-base ${location.pathname === "/privacy-policy"
-                        ? "text-[#F9920A]"
-                        : ""
+                      ? "text-[#F9920A]"
+                      : ""
                       }`}
                   >
                     Privacy Policy
@@ -150,6 +162,10 @@ const Footer = () => {
           </div>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {isModalOpen && <Modal onClose={closeModal} />}
+      </AnimatePresence>
     </>
   );
 };

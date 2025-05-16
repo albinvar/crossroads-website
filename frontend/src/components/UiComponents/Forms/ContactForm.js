@@ -3,13 +3,14 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import Captcha from "../../Captcha";
 import { Link } from "react-router";
 
-const ContactForm = () => {
+const ContactForm = ({ eventTitle = "", isNewsEvents = false, showHelpSection = true }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     location: "",
     helpOption: "",
+    newsEvent: eventTitle,
     message: "",
     IsChecked: true,
   });
@@ -40,7 +41,10 @@ const ContactForm = () => {
       newErrors.email = "Email is invalid";
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
     if (!formData.location.trim()) newErrors.location = "Location is required";
-    if (!formData.helpOption) newErrors.helpOption = "Please select an option";
+    if (showHelpSection && !formData.helpOption)
+      newErrors.helpOption = "Please select an option";
+    if (isNewsEvents && !formData.newsEvent.trim())
+      newErrors.newsEvent = "News and Events title is required";
     if (!formData.message.trim()) newErrors.message = "Message is required";
     if (!formData.IsChecked) newErrors.IsChecked = "You must consent to proceed";
     if (!recaptchaToken) newErrors.recaptcha = "reCAPTCHA verification failed";
@@ -63,6 +67,7 @@ const ContactForm = () => {
       phone: "",
       location: "",
       helpOption: "",
+      newsEvent: eventTitle, 
       message: "",
       IsChecked: true,
     });
@@ -74,7 +79,7 @@ const ContactForm = () => {
   console.log("reCAPTCHA Key:", reCaptchaKey);
   if (!reCaptchaKey) {
     console.error("reCAPTCHA site key is not defined. Please set VITE_RECAPTCHA_SITE_KEY in .env");
-    return <div className="text-red-400 text-sm">reCAPTCHA configuration error. Please spicontact support.</div>;
+    return <div className="text-red-400 text-sm">reCAPTCHA configuration error. Please contact support.</div>;
   }
 
   return (
@@ -145,56 +150,77 @@ const ContactForm = () => {
               name="location"
               value={formData.location}
               onChange={handleChange}
-              className="p-3 rounded-lg bg-transparent border border-gray-200 text-gray-200 placeholder-gray-400 focus-outline-none focus:ring-2 focus:ring-primary-orange-hover focus:border-none text-sm"
+              className="p-3 rounded-lg bg-transparent border border-gray-200 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-orange-hover focus:border-none text-sm"
               placeholder=""
             />
             {errors.location && (
               <p className="text-red-400 text-xs mt-1">{errors.location}</p>
             )}
           </div>
-          <div className="md:col-span-2 flex flex-col mt-5">
-            <label className="text-gray-200 text-xs mb-2">
-              How Can We Help You
-            </label>
-            <div className="flex flex-row w-full space-x-3">
-              <button
-                type="button"
-                onClick={() => handleHelpOption("Education")}
-                className={`w-full py-3 rounded-lg border border-gray-200 text-gray-200 transition-colors text-sm ${
-                  formData.helpOption === "Education"
-                    ? "bg-[#F9920A] border-[#F9920A]"
-                    : "hover:bg-[#F9920A] hover:border-[#F9920A]"
-                }`}
-              >
-                Education
-              </button>
-              <button
-                type="button"
-                onClick={() => handleHelpOption("Job Assistance")}
-                className={`w-full py-3 rounded-lg border border-gray-200 text-gray-200 transition-colors text-sm ${
-                  formData.helpOption === "Job Assistance"
-                    ? "bg-[#F9920A] border-[#F9920A]"
-                    : "hover:bg-[#F9920A] hover:border-[#F9920A]"
-                }`}
-              >
-                Job Assistance
-              </button>
-              <button
-                type="button"
-                onClick={() => handleHelpOption("Migration")}
-                className={`w-full py-3 rounded-lg border border-gray-200 text-gray-200 transition-colors text-sm ${
-                  formData.helpOption === "Migration"
-                    ? "bg-[#F9920A] border-[#F9920A]"
-                    : "hover:bg-[#F9920A] hover:border-[#F9920A]"
-                }`}
-              >
-                Migration
-              </button>
+          {isNewsEvents && (
+            <div className="md:col-span-2 flex flex-col">
+              <label htmlFor="newsEvent" className="text-gray-200 text-xs mb-2">
+                News and Events
+              </label>
+              <input
+                type="text"
+                id="newsEvent"
+                name="newsEvent"
+                value={formData.newsEvent}
+                onChange={handleChange}
+                className="p-3 rounded-lg bg-transparent border border-gray-200 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-orange-hover focus:border-none text-sm"
+                placeholder="Event Title"
+              />
+              {errors.newsEvent && (
+                <p className="text-red-400 text-xs mt-1">{errors.newsEvent}</p>
+              )}
             </div>
-            {errors.helpOption && (
-              <p className="text-red-400 text-xs mt-2">{errors.helpOption}</p>
-            )}
-          </div>
+          )}
+          {showHelpSection && !isNewsEvents && (
+            <div className="md:col-span-2 flex flex-col mt-5">
+              <label className="text-gray-200 text-xs mb-2">
+                How Can We Help You
+              </label>
+              <div className="flex flex-row w-full space-x-3">
+                <button
+                  type="button"
+                  onClick={() => handleHelpOption("Education")}
+                  className={`w-full py-3 rounded-lg border border-gray-200 text-gray-200 transition-colors text-sm ${
+                    formData.helpOption === "Education"
+                      ? "bg-[#F9920A] border-[#F9920A]"
+                      : "hover:bg-[#F9920A] hover:border-[#F9920A]"
+                  }`}
+                >
+                  Education
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleHelpOption("Job Assistance")}
+                  className={`w-full py-3 rounded-lg border border-gray-200 text-gray-200 transition-colors text-sm ${
+                    formData.helpOption === "Job Assistance"
+                      ? "bg-[#F9920A] border-[#F9920A]"
+                      : "hover:bg-[#F9920A] hover:border-[#F9920A]"
+                  }`}
+                >
+                  Job Assistance
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleHelpOption("Migration")}
+                  className={`w-full py-3 rounded-lg border border-gray-200 text-gray-200 transition-colors text-sm ${
+                    formData.helpOption === "Migration"
+                      ? "bg-[#F9920A] border-[#F9920A]"
+                      : "hover:bg-[#F9920A] hover:border-[#F9920A]"
+                  }`}
+                >
+                  Migration
+                </button>
+              </div>
+              {errors.helpOption && (
+                <p className="text-red-400 text-xs mt-2">{errors.helpOption}</p>
+              )}
+            </div>
+          )}
           <div className="md:col-span-2 flex flex-col">
             <label htmlFor="message" className="text-gray-200 text-xs mb-2">
               Message
@@ -322,49 +348,73 @@ const ContactForm = () => {
               <p className="text-red-400 text-lg mt-1">{errors.location}</p>
             )}
           </div>
-          <div className="flex flex-col mt-3">
-            <label className="text-gray-200 text-lg mb-2">
-              How Can We Help You
-            </label>
-            <div className="flex flex-col w-full space-y-2">
-              <button
-                type="button"
-                onClick={() => handleHelpOption("Education")}
-                className={`w-full py-2.5 rounded-lg border border-gray-200 text-gray-200 transition-colors text-lg ${
-                  formData.helpOption === "Education"
-                    ? "bg-[#F9920A] border-[#F9920A]"
-                    : "hover:bg-[#F9920A] hover:border-[#F9920A]"
-                }`}
+          {isNewsEvents && (
+            <div className="flex flex-col">
+              <label
+                htmlFor="newsEvent-mobile"
+                className="text-gray-200 text-lg mb-2"
               >
-                Education
-              </button>
-              <button
-                type="button"
-                onClick={() => handleHelpOption("Job Assistance")}
-                className={`w-full py-2.5 rounded-lg border border-gray-200 text-gray-200 transition-colors text-lg ${
-                  formData.helpOption === "Job Assistance"
-                    ? "bg-[#F9920A] border-[#F9920A]"
-                    : "hover:bg-[#F9920A] hover:border-[#F9920A]"
-                }`}
-              >
-                Job Assistance
-              </button>
-              <button
-                type="button"
-                onClick={() => handleHelpOption("Migration")}
-                className={`w-full py-2.5 rounded-lg border border-gray-200 text-gray-200 transition-colors text-lg ${
-                  formData.helpOption === "Migration"
-                    ? "bg-[#F9920A] border-[#F9920A]"
-                    : "hover:bg-[#F9920A] hover:border-[#F9920A]"
-                }`}
-              >
-                Migration
-              </button>
+                News and Events
+              </label>
+              <input
+                type="text"
+                id="newsEvent-mobile"
+                name="newsEvent"
+                value={formData.newsEvent}
+                onChange={handleChange}
+                className="p-2.5 rounded-lg bg-transparent border border-gray-200 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-orange-hover focus:border-none text-sm"
+                placeholder="Event Title"
+              />
+              {errors.newsEvent && (
+                <p className="text-red-400 text-lg mt-1">{errors.newsEvent}</p>
+              )}
             </div>
-            {errors.helpOption && (
-              <p className="text-red-400 text-lg mt-2">{errors.helpOption}</p>
-            )}
-          </div>
+          )}
+          {showHelpSection && !isNewsEvents && (
+            <div className="flex flex-col mt-3">
+              <label className="text-gray-200 text-lg mb-2">
+                How Can We Help You
+              </label>
+              <div className="flex flex-col w-full space-y-2">
+                <button
+                  type="button"
+                  onClick={() => handleHelpOption("Education")}
+                  className={`w-full py-2.5 rounded-lg border border-gray-200 text-gray-200 transition-colors text-lg ${
+                    formData.helpOption === "Education"
+                      ? "bg-[#F9920A] border-[#F9920A]"
+                      : "hover:bg-[#F9920A] hover:border-[#F9920A]"
+                  }`}
+                >
+                  Education
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleHelpOption("Job Assistance")}
+                  className={`w-full py-2.5 rounded-lg border border-gray-200 text-gray-200 transition-colors text-lg ${
+                    formData.helpOption === "Job Assistance"
+                      ? "bg-[#F9920A] border-[#F9920A]"
+                      : "hover:bg-[#F9920A] hover:border-[#F9920A]"
+                  }`}
+                >
+                  Job Assistance
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleHelpOption("Migration")}
+                  className={`w-full py-2.5 rounded-lg border border-gray-200 text-gray-200 transition-colors text-lg ${
+                    formData.helpOption === "Migration"
+                      ? "bg-[#F9920A] border-[#F9920A]"
+                      : "hover:bg-[#F9920A] hover:border-[#F9920A]"
+                  }`}
+                >
+                  Migration
+                </button>
+              </div>
+              {errors.helpOption && (
+                <p className="text-red-400 text-lg mt-2">{errors.helpOption}</p>
+              )}
+            </div>
+          )}
           <div className="flex flex-col">
             <label
               htmlFor="message-mobile"

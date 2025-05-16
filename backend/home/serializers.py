@@ -6,7 +6,7 @@ class HomeBannerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HomeBanner
-        fields = ['id', 'image', 'title', 'description', 'link', 'order']
+        fields = '__all__'
         
 class NewsEventsTitleSerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,7 +4,8 @@ import BannerSection from './BannerSection';
 import KeyFact from './KeyFact';
 import WhyChoose from './WhyChoose';
 import VirtualAssistance from './VirtualAssistance';
-import OurValuesSection from '../../../../../../About/OurValuesSection';
+import OurCourses from './OurCourses';
+import OurCoursesTitle from './OurCourseTitle';
 
 const CountryDedicatedPage = () => {
   const sections = [
@@ -12,7 +13,7 @@ const CountryDedicatedPage = () => {
     { name: 'Key Fact Section', component: <KeyFact /> },
     { name: 'Why Choose Section', component: <WhyChoose/> },
     { name: 'Virtual Assistance Section', component: <VirtualAssistance/> },
-    { name: 'Our Values Section', component: <OurValuesSection/> },
+    { name: 'Our Courses Section', component: <OurCoursesTitle/> },
   ];
 
   const [activeTab, setActiveTab] = useState(0);

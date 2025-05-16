@@ -35,9 +35,8 @@ const Navbar = () => {
   const [isServicesHovered, setIsServicesHovered] = useState(false);
   const [isEducationButtonHovered, setIsEducationButtonHovered] =
     useState(false);
-  const [isSearchHovered, setIsSearchHovered] = useState(false);
 
-  const location = useLocation(); // Get the current route
+  const location = useLocation();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -104,9 +103,12 @@ const Navbar = () => {
                 >
                   Email
                 </span>
-                <span className="text-[#00334D] text-xs">
+                <a
+                  href="mailto:info@crossroadsge.com"
+                  className="text-[#00334D] text-xs hover:text-[#F9920A] transition-all duration-300"
+                >
                   info@crossroadsge.com
-                </span>
+                </a>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -118,7 +120,12 @@ const Navbar = () => {
                 >
                   Call
                 </span>
-                <span className="text-[#00334D] text-xs">+91 9539888001</span>
+                <a
+                  href="tel:+919539888001"
+                  className="text-[#00334D] text-xs hover:text-[#F9920A] transition-all duration-300"
+                >
+                  +91 9539888001
+                </a>
               </div>
             </div>
             <Button
@@ -322,7 +329,7 @@ const Navbar = () => {
                     isHovered: hoveredLink === "testimonials",
                   })
                 }
-                className="text-[#fcfcfc] hover:text-[# valoriA] transform transition-all duration-300"
+                className="text-[#fcfcfc] hover:text-[#F9920A] transform transition-all duration-300"
                 onMouseEnter={() => setHoveredLink("testimonials")}
                 onMouseLeave={() => setHoveredLink(null)}
               >
@@ -435,7 +442,7 @@ const Navbar = () => {
                 Services
                 <svg
                   className={`w-4 h-4 ml-1 transform transition-transform ${
-                    isServicesOpen ? "rotate-+\]180" : "rotate-0"
+                    isServicesOpen ? "rotate-180" : "rotate-0"
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -575,7 +582,7 @@ const Navbar = () => {
                   isHovered: hoveredLink === "mobile-blogs",
                 })
               }
-              className="px-4 py-2 w-fullCosa text-left text-sm text-[#fcfcfc] hover:text-[#F9920A] hover:bg-[#F9920A]/10 transition-all duration-300"
+              className="px-4 py-2 w-full text-left text-sm text-[#fcfcfc] hover:text-[#F9920A] hover:bg-[#F9920A]/10 transition-all duration-300"
               onMouseEnter={() => setHoveredLink("mobile-blogs")}
               onMouseLeave={() => setHoveredLink(null)}
               onClick={toggleMenu}
@@ -637,42 +644,32 @@ const Navbar = () => {
             >
               Contact Us
             </NavLink>
-            <NavLink
-              to="/email"
-              style={({ isActive }) =>
-                navLinkStyles({
-                  isActive,
-                  isHovered: hoveredLink === "mobile-email",
-                })
-              }
+            <a
+              href="mailto:info@crossroadsge.com"
+              style={navLinkStyles({
+                isActive: location.pathname === "/email",
+                isHovered: hoveredLink === "mobile-email",
+              })}
               className="px-4 py-2 w-full text-left text-sm text-[#fcfcfc] hover:text-[#F9920A] hover:bg-[#F9920A]/10 transition-all duration-300"
               onMouseEnter={() => setHoveredLink("mobile-email")}
               onMouseLeave={() => setHoveredLink(null)}
-              onClick={() => {
-                window.location.href = "mailto:info@crossroadsge.com";
-                toggleMenu();
-              }}
+              onClick={toggleMenu}
             >
               Email: info@crossroadsge.com
-            </NavLink>
-            <NavLink
-              to="/call"
-              style={({ isActive }) =>
-                navLinkStyles({
-                  isActive,
-                  isHovered: hoveredLink === "mobile-call",
-                })
-              }
+            </a>
+            <a
+              href="tel:+919539888001"
+              style={navLinkStyles({
+                isActive: location.pathname === "/call",
+                isHovered: hoveredLink === "mobile-call",
+              })}
               className="px-4 py-2 w-full text-left text-sm text-[#fcfcfc] hover:text-[#F9920A] hover:bg-[#F9920A]/10 transition-all duration-300"
               onMouseEnter={() => setHoveredLink("mobile-call")}
               onMouseLeave={() => setHoveredLink(null)}
-              onClick={() => {
-                window.location.href = "tel:+919539888001";
-                toggleMenu();
-              }}
+              onClick={toggleMenu}
             >
               Call: +91 9539888001
-            </NavLink>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

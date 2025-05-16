@@ -137,6 +137,26 @@ class DestinationDedicatedAssistance(models.Model):
     def __str__(self):
         return self.title or "Unnamed Virtual Assistant"
     
+class DestinationDedicatedOurCoursesTitle(models.Model):
+    subcategory = models.ForeignKey(DestinationDedicatedPage, related_name='our_courses_title', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.title or "Unnamed Our Courses Slider Title"
+
+class DestinationDedicatedOurCourses(models.Model):
+    subcategory = models.ForeignKey(DestinationDedicatedPage, related_name='our_courses_listing', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='our_courses/', null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    description = models.CharField(max_length=2000, null=True, blank=True)
+    order = models.IntegerField(default=0) 
+
+    def __str__(self):
+        return self.title or "Unnamed Our Courses Listing"
+
+    class Meta:
+        ordering = ['order']
+    
 class CourseServiceBanner(models.Model):
     image = models.ImageField(upload_to='course_service_banner/', null=True, blank=True)
     title = models.CharField(max_length=255, null=True, blank=True)

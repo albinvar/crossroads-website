@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const CourseCard = ({ title, description, image, link }) => {
+const CourseCard = ({ title, description, imageSrc, link }) => {
   return (
     <div className="flex flex-col bg-white shadow-[4px_4px_10px_0px_rgba(0,0,0,0.1)] hover:shadow-xl hover:shadow-gray-300 transition-all duration-300">
       <Link to={`/services/education/course/${link}`}>
         <div className="relative">
           <img
-            src={image}
+            src={imageSrc}
             alt="Course"
             className="w-full h-48 object-cover"
             onError={(e) => (e.target.src = "https://via.placeholder.com/300x200")}

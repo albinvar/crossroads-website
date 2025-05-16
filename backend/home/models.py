@@ -6,6 +6,7 @@ class HomeBanner(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     apply_now_url = models.URLField(max_length=200, null=True, blank=True)
     link = models.SlugField(max_length=255, unique=True, null=True, blank=True) 
+    button_name = models.CharField(max_length=250, null=True, blank=True)
     order = models.IntegerField(default=0)
 
     def __str__(self):

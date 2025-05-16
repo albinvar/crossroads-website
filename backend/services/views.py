@@ -3,8 +3,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
-from .models import ServiceHighlights, DocumentationAssistanceBanner, LanguageLabBanner, CountryServiceBanner, CourseServiceBanner, DocumentationAssistanceTab, DocumentationAssistanceListing, LanguageLabListing, Destination, DestinationDedicatedPage, DestinationDedicatedKeyFact, DestinationDedicatedChooseTitle, DestinationDedicatedChooseList, DestinationDedicatedIntakeInformation, DestinationDedicatedAssistance
-from .serializers import ServiceHighlightsSerializer, DocumentationAssistanceBannerSerializer, LanguageLabBannerSerializer, CountryServiceBannerSerializer, CourseServiceBannerSerializer, DocumentationAssistanceTabSerializer, DocumentationAssistanceListingSerializer, LanguageLabListingSerializer, DestinationSerializer, DestinationDedicatedPageSerializer, DestinationDedicatedKeyFactSerializer, DestinationDedicatedChooseTitleSerializer, DestinationDedicatedChooseListSerializer, DestinationDedicatedIntakeInformationSerializer, DestinationDedicatedAssistanceSerializer
+from .models import ServiceHighlights, DocumentationAssistanceBanner, LanguageLabBanner, CountryServiceBanner, CourseServiceBanner, DocumentationAssistanceTab, DocumentationAssistanceListing, LanguageLabListing, Destination, DestinationDedicatedPage, DestinationDedicatedKeyFact, DestinationDedicatedChooseTitle, DestinationDedicatedChooseList, DestinationDedicatedIntakeInformation, DestinationDedicatedAssistance, DestinationDedicatedOurCoursesTitle, DestinationDedicatedOurCourses
+from .serializers import ServiceHighlightsSerializer, DocumentationAssistanceBannerSerializer, LanguageLabBannerSerializer, CountryServiceBannerSerializer, CourseServiceBannerSerializer, DocumentationAssistanceTabSerializer, DocumentationAssistanceListingSerializer, LanguageLabListingSerializer, DestinationSerializer, DestinationDedicatedPageSerializer, DestinationDedicatedKeyFactSerializer, DestinationDedicatedChooseTitleSerializer, DestinationDedicatedChooseListSerializer, DestinationDedicatedIntakeInformationSerializer, DestinationDedicatedAssistanceSerializer, DestinationDedicatedOurCoursesSerializer, DestinationDedicatedOurCoursesTitleSerializer
 
 class ServiceHighlightsViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
@@ -239,6 +239,48 @@ class DestinationDedicatedAssistanceViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = DestinationDedicatedAssistance.objects.all()
     serializer_class = DestinationDedicatedAssistanceSerializer
+    
+class DestinationDedicatedOurCoursesTitleViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = DestinationDedicatedOurCoursesTitle.objects.all()
+    serializer_class = DestinationDedicatedOurCoursesTitleSerializer
+    
+class DestinationDedicatedOurCoursesViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = DestinationDedicatedOurCourses.objects.all() 
+    serializer_class = DestinationDedicatedOurCoursesSerializer 
+
+    @action(detail=False, methods=['post'], url_path='reorder')
+    def reorder(self, request):
+        order_data = request.data.get('order', [])
+        
+        if not order_data:
+            return Response(
+                {"error": "No order data provided"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            for item in order_data:
+                our_courses_id = item.get('id')
+                new_order = item.get('order')
+                if our_courses_id is None or new_order is None:
+                    return Response(
+                        {"error": "Invalid order data format"},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+                DestinationDedicatedOurCourses.objects.filter(id=our_courses_id).update(order=new_order)
+
+            return Response(
+                {"message": "Order updated successfully"},
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class CourseServiceBannerViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]

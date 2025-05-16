@@ -240,7 +240,7 @@ const Events = () => {
                                 ? 'Register Now'
                                 : 'View Details'
                             }
-                            className="absolute top-4 left-4 text-white text-md bg-primary-orange hover:bg-primary-orange/80 rounded-full px-4 py-2 transition-colors duration-300"
+                            className="absolute top-4 left-4 text-white text-md bg-primary-orange hover:bg-primary-dark rounded-full px-4 py-2 transition-colors duration-300"
                           />
                         </div>
                         <div className="p-4 flex flex-col flex-grow">

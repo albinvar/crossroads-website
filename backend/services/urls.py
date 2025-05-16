@@ -17,6 +17,8 @@ router.register(r'service-destination-choose-title-entry', views.DestinationDedi
 router.register(r'service-destination-choose-list-entry', views.DestinationDedicatedChooseListViewSet, basename='destination-choose-list')
 router.register(r'service-destination-intake-information-entry', views.DestinationDedicatedIntakeInformationViewSet, basename='destination-intake-information')
 router.register(r'service-destination-assistance-entry', views.DestinationDedicatedAssistanceViewSet, basename='destination-assistance')
+router.register(r'service-destination-our-courses-title', views.DestinationDedicatedOurCoursesTitleViewSet, basename='our-courses-title')
+router.register(r'service-destination-our-courses-listing', views.DestinationDedicatedOurCoursesViewSet, basename='our-courses')
 router.register(r'service-course-banner', views.CourseServiceBannerViewSet)
 
 urlpatterns = [
