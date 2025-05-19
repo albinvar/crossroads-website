@@ -150,7 +150,12 @@ SIMPLE_JWT = {
 
 # CORS settings (for frontend-backend communication)
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
-CSRF_TRUSTED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+CSRF_TRUSTED_ORIGINS = [
+    "https://crossroadsbackend.marketbytes.in",
+    "https://crossroadscms.marketbytes.in",
+    "http://crossroadscms.marketbytes.in",
+]
+
 
 
 CORS_ALLOW_CREDENTIALS = True
