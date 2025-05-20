@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import React, { useEffect, useRef, useState } from 'react';
+import { useQuill } from 'react-quilljs';
+import 'quill/dist/quill.snow.css';
 
 const TextEditor = ({
   value,
@@ -9,10 +9,6 @@ const TextEditor = ({
   customStyle = {},
   warningMessage,
 }) => {
-  const quillRef = useRef(null);
-  const isUpdating = useRef(false);
-  const prevValue = useRef(value);
-
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -48,64 +44,77 @@ const TextEditor = ({
     'align',
   ];
 
+  const { quill, quillRef } = useQuill({
+    modules,
+    formats,
+    placeholder,
+  });
+
+  const isUpdating = useRef(false);
+  const prevValue = useRef(value);
+  const [isEditorReady, setIsEditorReady] = useState(false);
+
+  // Effect to set editor readiness
   useEffect(() => {
-    if (quillRef.current) {
-      const quill = quillRef.current.getEditor();
-      if (value !== prevValue.current && !isUpdating.current) {
+    if (quill) {
+      setIsEditorReady(true);
+    }
+  }, [quill]);
+
+  // Effect to handle content synchronization and text-change events
+  useEffect(() => {
+    if (!isEditorReady || !quill) return;
+
+    if (value !== prevValue.current && !isUpdating.current) {
+      isUpdating.current = true;
+      try {
+        if (value) {
+          quill.clipboard.dangerouslyPasteHTML(value);
+        } else {
+          quill.setText('');
+        }
+      } catch (err) {
+        console.error('Error setting Quill content:', err);
+      }
+      isUpdating.current = false;
+      prevValue.current = value;
+    }
+
+    const handleTextChange = () => {
+      if (!isUpdating.current) {
         isUpdating.current = true;
-        try {
-          quill.clipboard.dangerouslyPasteHTML(value || '');
-        } catch (err) {
-          console.error('Error setting Quill content:', err);
+        const content = quill.root.innerHTML === '<p><br></p>' ? '' : quill.root.innerHTML;
+        if (content !== value) {
+          onChange(content);
+          prevValue.current = content;
         }
         isUpdating.current = false;
-        prevValue.current = value;
       }
+    };
 
-      const handleTextChange = () => {
-        if (!isUpdating.current) {
-          isUpdating.current = true;
-          const content = quill.root.innerHTML === '<p><br></p>' ? '' : quill.root.innerHTML;
-          if (content !== value) {
-            onChange(content);
-            prevValue.current = content;
-          }
-          isUpdating.current = false;
-        }
-      };
+    quill.on('text-change', handleTextChange);
 
-      quill.on('text-change', handleTextChange);
+    return () => {
+      quill.off('text-change', handleTextChange);
+    };
+  }, [isEditorReady, quill, value, onChange]);
 
-      return () => {
-        quill.off('text-change', handleTextChange);
-      };
-    }
-  }, [value, onChange]);
-
+  // Effect to handle editor focus
   useEffect(() => {
-    if (quillRef.current && !value) {
-      const quill = quillRef.current.getEditor();
-      const editorElement = quillRef.current.getEditor().root;
+    if (!isEditorReady || !quill || !quillRef.current) return;
+
+    if (!value) {
+      const editorElement = quillRef.current.querySelector('.ql-editor');
       if (editorElement && document.activeElement !== editorElement) {
         quill.focus();
       }
     }
-  }, [value]);
+  }, [isEditorReady, quill, quillRef, value]);
 
   return (
     <div className="text-editor-container mb-4" style={customStyle}>
-      <ReactQuill
+      <div
         ref={quillRef}
-        value={value}
-        onChange={(content, delta, source, editor) => {
-          if (source === 'user' && !isUpdating.current) {
-            const html = editor.getHTML() === '<p><br></p>' ? '' : editor.getHTML();
-            onChange(html);
-          }
-        }}
-        modules={modules}
-        formats={formats}
-        placeholder={placeholder}
         className="text-editor w-full h-auto border border-gray-300"
       />
       {warningMessage && (
