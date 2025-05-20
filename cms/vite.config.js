@@ -1,19 +1,20 @@
-import { defineConfig, transformWithEsbuild } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from '@tailwindcss/vite'
- 
+import { defineConfig, transformWithEsbuild } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+
 export default defineConfig({
   plugins: [
-    react(),tailwindcss(),
+    react(),
+    tailwindcss(),
     {
-      name: "load+transform-js-files-as-jsx",
+      name: 'load+transform-js-files-as-jsx',
       async transform(code, id) {
         if (!id.match(/src\/.*\.js$/)) {
           return null;
         }
         return transformWithEsbuild(code, id, {
-          loader: "jsx",
-          jsx: "automatic",
+          loader: 'jsx',
+          jsx: 'automatic',
         });
       },
     },
@@ -22,12 +23,17 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       loader: {
-        ".js": "jsx",
+        '.js': 'jsx',
       },
     },
-    include: ['quill', 'react-quilljs'],
+    include: ['quill', 'react-quill'],
+    force: true,
   },
-  envPrefix: 'VITE_'
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+      include: [/quill/, /react-quill/, /node_modules/],
+    },
+  },
+  envPrefix: 'VITE_',
 });
- 
- 

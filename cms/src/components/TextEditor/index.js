@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { useQuill } from 'react-quilljs';
-import 'quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const TextEditor = ({
   value,
@@ -9,6 +9,10 @@ const TextEditor = ({
   customStyle = {},
   warningMessage,
 }) => {
+  const quillRef = useRef(null);
+  const isUpdating = useRef(false);
+  const prevValue = useRef(value);
+
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -44,17 +48,9 @@ const TextEditor = ({
     'align',
   ];
 
-  const { quill, quillRef } = useQuill({
-    modules,
-    formats,
-    placeholder,
-  });
-
-  const isUpdating = useRef(false);
-  const prevValue = useRef(value);
-
   useEffect(() => {
-    if (quill) {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
       if (value !== prevValue.current && !isUpdating.current) {
         isUpdating.current = true;
         try {
@@ -84,21 +80,32 @@ const TextEditor = ({
         quill.off('text-change', handleTextChange);
       };
     }
-  }, [quill, value, onChange]);
+  }, [value, onChange]);
 
   useEffect(() => {
-    if (quill && !value) {
-      const editorElement = quillRef.current.querySelector('.ql-editor');
+    if (quillRef.current && !value) {
+      const quill = quillRef.current.getEditor();
+      const editorElement = quillRef.current.getEditor().root;
       if (editorElement && document.activeElement !== editorElement) {
         quill.focus();
       }
     }
-  }, [quill, quillRef, value]);
+  }, [value]);
 
   return (
     <div className="text-editor-container mb-4" style={customStyle}>
-      <div
+      <ReactQuill
         ref={quillRef}
+        value={value}
+        onChange={(content, delta, source, editor) => {
+          if (source === 'user' && !isUpdating.current) {
+            const html = editor.getHTML() === '<p><br></p>' ? '' : editor.getHTML();
+            onChange(html);
+          }
+        }}
+        modules={modules}
+        formats={formats}
+        placeholder={placeholder}
         className="text-editor w-full h-auto border border-gray-300"
       />
       {warningMessage && (
