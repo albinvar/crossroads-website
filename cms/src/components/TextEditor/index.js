@@ -99,7 +99,7 @@ const TextEditor = ({
     <div className="text-editor-container mb-4" style={customStyle}>
       <div
         ref={quillRef}
-        className="text-editor w-full h-auto border border-gray-300"
+        className="text-editor col-auto w-full h-auto border border-gray-300"
       />
       {warningMessage && (
         <p className="text-xs text-red-500 mt-1">{warningMessage}</p>
