@@ -25,6 +25,7 @@ export default defineConfig({
         ".js": "jsx",
       },
     },
+    include: ['quill', 'react-quilljs'],
   },
   envPrefix: 'VITE_'
 });
